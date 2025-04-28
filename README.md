@@ -43,3 +43,9 @@ python3 main.py <client_id> <client_secret>
 ```
 
 Make sure to provide your client credentials as command line arguments when running the script. 
+
+## Tests
+
+```bash
+pytest test_update_suivi_dtnum.py
+```
