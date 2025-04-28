@@ -13,7 +13,7 @@
 
 Faire tourner le script `main.py` avec les credentials sus-cités et le dernier fichier de suivi
 
-# Instructions pour update_suivi_dtnum.py
+# Instructions pour installer le projet
 
 1. Create a virtual environment:
 ```bash
@@ -39,7 +39,7 @@ pip install -r requirements.txt
 
 The main script can be run with:
 ```bash
-python3 update_suivi_dtnum.py <client_id> <client_secret>
+python3 main.py <client_id> <client_secret>
 ```
 
 Make sure to provide your client credentials as command line arguments when running the script. 
