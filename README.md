@@ -32,14 +32,14 @@ source venv/bin/activate
 
 3. Install dependencies:
 ```bash
-pip install -r lib/suivi_dtnum/requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Usage
 
 The main script can be run with:
 ```bash
-python3 lib/suivi_dtnum/update_suivi_dtnum.py <client_id> <client_secret>
+python3 update_suivi_dtnum.py <client_id> <client_secret>
 ```
 
 Make sure to provide your client credentials as command line arguments when running the script. 

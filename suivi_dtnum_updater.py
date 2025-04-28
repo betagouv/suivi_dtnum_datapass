@@ -142,9 +142,9 @@ class SuiviDtnumUpdater:
 
         # create files with the leftover contents
         print(f"Leftover input content : {len(input_content)} -> Check the file leftover_input_content.csv")
-        input_content.to_csv("lib/suivi_dtnum/sources/leftover_input_content.csv", index=False, quoting=1)
+        input_content.to_csv("sources/leftover_input_content.csv", index=False, quoting=1)
         print(f"Leftover datapass content : {len(datapass_content)} -> Check the file leftover_datapass_content.csv")
-        datapass_content.to_csv("lib/suivi_dtnum/sources/leftover_datapass_content.csv", index=False, quoting=1)
+        datapass_content.to_csv("sources/leftover_datapass_content.csv", index=False, quoting=1)
 
         # Convert list to DataFrame once at the end
         output_content = pd.DataFrame(output_rows)
@@ -161,10 +161,10 @@ class SuiviDtnumUpdater:
 
     def generate_output_content(self, all_demandes, input_content, output_file_path):
         datapass_content = self.make_datapass_content_from_demandes(all_demandes)
-        datapass_content.to_csv("lib/suivi_dtnum/sources/test_datapass_content.csv", index=False, quoting=1)
+        datapass_content.to_csv("sources/test_datapass_content.csv", index=False, quoting=1)
 
         output_content = self.merge_input_and_datapass_content(input_content, datapass_content)
-        output_content.to_csv("lib/suivi_dtnum/sources/test_output_content.csv", index=False, quoting=1)
+        output_content.to_csv("sources/test_output_content.csv", index=False, quoting=1)
 
         # print the output content in an excel file
         with pd.ExcelWriter(output_file_path) as writer:

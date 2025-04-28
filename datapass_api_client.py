@@ -2,8 +2,8 @@ import requests
 
 # Swagger of the DataPass API: https://github.com/etalab/data_pass/blob/develop/config/openapi/v1.yaml
 class DataPassApiClient:
-    BASE_URL = 'http://localhost:3000'
-    # BASE_URL = 'https://sandbox.v2.datapass.api.gouv.fr'
+    # BASE_URL = 'http://localhost:3000'
+    BASE_URL = 'https://sandbox.v2.datapass.api.gouv.fr'
 
     def __init__(self, client_id, client_secret, base_url=BASE_URL):
         self.client_id = client_id

@@ -71,7 +71,7 @@ def test_state_of_datapass_v1_without_demande_id_in_input_content(input_content)
 
 @pytest.fixture(scope="session")
 def datapass_content():
-    return pd.read_csv("lib/suivi_dtnum/sources/test_datapass_content.csv", quoting=1)
+    return pd.read_csv("sources/test_datapass_content.csv", quoting=1)
 
 def test_unicity_of_habilitations_in_datapass_content(datapass_content):
     habilitation_rows = datapass_content[datapass_content['N° Habilitation v2'].notna()]
@@ -97,7 +97,7 @@ def test_state_of_demandes_in_datapass_content(datapass_content):
 
 @pytest.fixture(scope="session")
 def output_content():
-    output_content = pd.read_csv("lib/suivi_dtnum/sources/test_output_content.csv", quoting=1)
+    output_content = pd.read_csv("sources/test_output_content.csv", quoting=1)
     output_content = output_content[~output_content['N° DataPass v1'].isin(NOT_DGFIP_DATAPASS_IDS)]
     return output_content
 
@@ -132,13 +132,13 @@ def test_presence_of_raison_sociale_in_output_content(output_content):
 
 @pytest.fixture(scope="session")
 def leftover_input_content():
-    leftover_input_content = pd.read_csv("lib/suivi_dtnum/sources/leftover_input_content.csv", quoting=1)
+    leftover_input_content = pd.read_csv("sources/leftover_input_content.csv", quoting=1)
     leftover_input_content = leftover_input_content[~leftover_input_content['N° DataPass v1'].isin(NOT_DGFIP_DATAPASS_IDS)]
     return leftover_input_content
 
 @pytest.fixture(scope="session")
 def leftover_datapass_content():
-    return pd.read_csv("lib/suivi_dtnum/sources/leftover_datapass_content.csv", quoting=1)
+    return pd.read_csv("sources/leftover_datapass_content.csv", quoting=1)
 
 def test_state_of_leftover_input_content(leftover_input_content):
     valid_states = ["Supprimé", "Brouillon", "Refusé"]

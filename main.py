@@ -13,6 +13,7 @@ if __name__ == "__main__":
         print("Usage: python update_suivi_dtnum.py <client_id> <client_secret>")
         sys.exit(1)
         
+    # TODO : variable d'environnement instead
     client_id = sys.argv[1]
     client_secret = sys.argv[2]
 
