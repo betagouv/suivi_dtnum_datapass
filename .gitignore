@@ -1,0 +1,4 @@
+# Ignore "DTNUM suivi" sources and python virtual env
+sources/*
+__pycache__
+venv/
