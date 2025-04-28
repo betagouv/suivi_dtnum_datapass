@@ -42,6 +42,7 @@ class DatapassRowMaker:
 
         row = self.format_data_attributes(row, self.demande["data"])
         row["Date de création / réception"] = self.format_date(self.demande['reopened_at'] or self.demande["created_at"])
+        # row["Date de dernière modification"] = self.format_date(self.demande["events"].last()['created_at'])  # TODO still need this ? (need to add the data to the API)
         row["Date de dernière soumission"] = self.format_date(self.demande["last_submitted_at"]) # TODO : make a new column for this, and keep the updated_at to have the last "answer" date
         row["Statut"] = data_correspondances.match_statut(self.demande["state"]) 
         

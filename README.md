@@ -3,7 +3,7 @@
 ## Initialisation du fichier post-migration
 
 1. Récupérer la dernière version du fichier de suivi
-2. Renommer la colonne "N° DataPass v1" en "N° DataPass v1" + ajouter "Date de dernière soumission"
+2. Renommer la colonne "N° DataPass" en "N° DataPass v1" + ajouter "Date de dernière soumission"
 3. Extraire les IDs de V2 des datapass du fichier de suivi depuis la prod
 4. Insérer les IDs de v2 dans 2 nouvelles colonnes du fichier de suivi "N° Demande v2" et "N° Habilitation v2"
 5. Générer des credentials d'accès à l'API pour un user dgfip (maimouna ?)
