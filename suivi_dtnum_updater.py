@@ -82,11 +82,12 @@ class SuiviDtnumUpdater:
 
         return output_rows
 
-    # TODO : checker pourquoi le nombre de lignes ne descend pas lorsqu'on fait cette passe pour matcher les demandes qui ont récemment gagné une habilitation
     def merge_demandes_with_new_habilitations(self, input_content, datapass_content):
         output_rows = []
 
-        for input_row_index, input_row in input_content.iterrows():
+        input_content_without_habilitation = input_content[input_content['N° Habilitation v2'].isnull()]
+
+        for input_row_index, input_row in input_content_without_habilitation.iterrows():
             datapass_rows = datapass_content[(datapass_content['N° Demande v2'] == input_row['N° Demande v2']) & ~datapass_content['N° Habilitation v2'].isnull()]
 
             if len(datapass_rows) == 0:
