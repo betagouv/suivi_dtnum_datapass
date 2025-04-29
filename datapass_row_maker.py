@@ -36,6 +36,7 @@ class DatapassRowMaker:
         row["N° Demande v2"] = self.demande["id"]
         row["N° Habilitation v2"] = None
         row["Environnement"] = data_correspondances.match_environnement(self.demande["form_uid"], self.demande["type"])
+        row['Criticité'] = 'Normale' # Default value, will be overwritten by the input content if it exists
         row["API"] = data_correspondances.match_api_name(self.demande["type"])
         row["Type"] = "Avenant" if self.demande["reopening"] else "Initial"
         row["Modèle pré-rempli / cas d'usage"] = data_correspondances.match_cas_dusage(self.demande["form_uid"])
