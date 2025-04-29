@@ -51,7 +51,7 @@ class SuiviDtnumUpdater:
 
 
 
-    def merge_demandes_and_habilitations(self, input_content, datapass_content):
+    def merge_demandes_and_habilitations_and_remove_matched_rows(self, input_content, datapass_content):
         output_rows = []
 
         for input_row_index, input_row in input_content.iterrows():
@@ -74,6 +74,7 @@ class SuiviDtnumUpdater:
                 datapass_row = datapass_rows.iloc[0]
                 output_row = self.merge_input_row_and_datapass_row(input_row, datapass_row)
                 output_rows.append(output_row)
+                # Remove matched rows from both contents
                 datapass_content.drop(datapass_rows.index, inplace=True)
                 input_content.drop(input_row_index, inplace=True)
             else:
@@ -82,7 +83,7 @@ class SuiviDtnumUpdater:
 
         return output_rows
 
-    def merge_demandes_with_new_habilitations(self, input_content, datapass_content):
+    def merge_demandes_with_new_habilitations_and_remove_matched_rows(self, input_content, datapass_content):
         output_rows = []
 
         input_content_without_habilitation = input_content[input_content['N° Habilitation v2'].isnull()]
@@ -96,6 +97,7 @@ class SuiviDtnumUpdater:
                 datapass_row = datapass_rows.iloc[0]
                 output_row = self.merge_input_row_and_datapass_row(input_row, datapass_row)
                 output_rows.append(output_row)
+                # Remove matched rows from both contents
                 datapass_content.drop(datapass_rows.index, inplace=True)
                 input_content.drop(input_row_index, inplace=True)
             else:
@@ -113,7 +115,7 @@ class SuiviDtnumUpdater:
         # (Note : We might need to adapt the combination differently for the v1 and the v2 data)
         return cleaned_input_row.combine_first(datapass_row).combine_first(input_row)
 
-    def add_leftover_datapass(self, datapass_content):
+    def add_leftover_datapass_and_remove_matched_rows(self, datapass_content):
         output_rows = []
         relevant_datapasses = datapass_content[~datapass_content['Statut'].isin(["Brouillon", "Supprimé"])]
 
@@ -126,17 +128,17 @@ class SuiviDtnumUpdater:
     def merge_input_and_datapass_content(self, input_content, datapass_content):
         print(f"Lengths of contents before merging : input: {len(input_content)} datapass: {len(datapass_content)}")
         # Merge everything simple, meaning the rows of demandes without habilitations + the rows of habilitations from both contents
-        output_rows = self.merge_demandes_and_habilitations(input_content, datapass_content)
+        output_rows = self.merge_demandes_and_habilitations_and_remove_matched_rows(input_content, datapass_content)
         print(f"Lengths of contents after merging demandes and habilitations : input: {len(input_content)} datapass: {len(datapass_content)}")
 
         # We check the demandes with new habilitations after the first merge
         # because we want to be sure of which habilitation row is merging with the former demande row
         # so we wait for the first pass to match all the former habilitations.
-        output_rows.extend(self.merge_demandes_with_new_habilitations(input_content, datapass_content))
+        output_rows.extend(self.merge_demandes_with_new_habilitations_and_remove_matched_rows(input_content, datapass_content))
         print(f"Lengths of contents after merge new habilitations : input: {len(input_content)} datapass: {len(datapass_content)}")
 
         # add the new content from datapass that doesn't match any input content
-        output_rows.extend(self.add_leftover_datapass(datapass_content))
+        output_rows.extend(self.add_leftover_datapass_and_remove_matched_rows(datapass_content))
         print(f"Lengths of contents after adding leftover datapass content : input: {len(input_content)} datapass: {len(datapass_content)}")
 
         # add the leftover input content that we couldn't match with datapass
