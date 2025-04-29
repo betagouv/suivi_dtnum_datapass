@@ -124,6 +124,7 @@ class SuiviDtnumUpdater:
 
     def merge_input_and_datapass_content(self, input_content, datapass_content):
         print(f"Lengths of contents before merging : input: {len(input_content)} datapass: {len(datapass_content)}")
+        # Merge everything simple, meaning the rows of demandes without habilitations + the rows of habilitations from both contents
         output_rows = self.merge_demandes_and_habilitations(input_content, datapass_content)
         print(f"Lengths of contents after merging demandes and habilitations : input: {len(input_content)} datapass: {len(datapass_content)}")
 
