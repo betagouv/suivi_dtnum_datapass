@@ -156,13 +156,14 @@ class SuiviDtnumUpdater:
         datapass_content.to_csv("sources/leftover_datapass_content.csv", index=False, quoting=1)
 
         # Fill only blank regions and departments using the Address API
-        # For the moment, handling null/none values of postcode by replacing it by ''
+        # Not processing rows with null/none values of postcode for the moment
         for row in output_rows:
-            postcode = row.get("Code postal") or ''
-            if not row.get("Département"):
-                row["Département"] = address_api_client.search_department_by_postcode(postcode)
-            if not row.get("Région"):
-                row["Région"] = address_api_client.search_region_by_postcode(postcode)    
+            postcode = row.get("Code postal")
+            if postcode:
+                if not row.get("Département"):
+                    row["Département"] = address_api_client.search_department_by_postcode(postcode)
+                if not row.get("Région"):
+                    row["Région"] = address_api_client.search_region_by_postcode(postcode)    
 
         # Convert list to DataFrame once at the end
         output_content = pd.DataFrame(output_rows)
