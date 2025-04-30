@@ -1,6 +1,7 @@
 import pandas as pd
 from datapass_api_client import DataPassApiClient
 from datapass_row_maker import DatapassRowMaker
+from address_api_client import AddressApiClient
 
 class SuiviDtnumUpdater:
     def __init__(self, client_id, client_secret):
@@ -126,6 +127,9 @@ class SuiviDtnumUpdater:
         return output_rows
 
     def merge_input_and_datapass_content(self, input_content, datapass_content):
+
+        address_api_client = AddressApiClient()
+
         print(f"Lengths of contents before merging : input: {len(input_content)} datapass: {len(datapass_content)}")
         # Merge everything simple, meaning the rows of demandes without habilitations + the rows of habilitations from both contents
         output_rows = self.merge_demandes_and_habilitations_and_remove_matched_rows(input_content, datapass_content)
@@ -150,6 +154,15 @@ class SuiviDtnumUpdater:
         input_content.to_csv("sources/leftover_input_content.csv", index=False, quoting=1)
         print(f"Leftover datapass content : {len(datapass_content)} -> Check the file leftover_datapass_content.csv")
         datapass_content.to_csv("sources/leftover_datapass_content.csv", index=False, quoting=1)
+
+        # Fill only blank regions and departments using the Address API
+        # For the moment, handling null/none values of postcode by replacing it by ''
+        for row in output_rows:
+            postcode = row.get("Code postal") or ''
+            if not row.get("Département"):
+                row["Département"] = address_api_client.search_department_by_postcode(postcode)
+            if not row.get("Région"):
+                row["Région"] = address_api_client.search_region_by_postcode(postcode)    
 
         # Convert list to DataFrame once at the end
         output_content = pd.DataFrame(output_rows)
