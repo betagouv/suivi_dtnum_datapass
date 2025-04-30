@@ -58,9 +58,7 @@ class DatapassRowMaker:
         adresse = etablissement.get("adresseEtablissement", {})
         row['Code postal'] = adresse.get("codePostalEtablissement")
         row['Ville'] = adresse.get("libelleCommuneEtablissement")
-        department_number = row['Code postal'][:2] if row['Code postal'] else None
-        # TODO : utiliser l'API Adresse : https://adresse.data.gouv.fr/outils/api-doc/adresse
-        row['Département'] = department_number
+        row['Département'] = None # Made none to be filled by the Address API
         row['Région'] = None
 
         return row

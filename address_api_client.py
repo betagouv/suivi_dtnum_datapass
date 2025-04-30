@@ -22,7 +22,7 @@ class AddressApiClient:
             departement = departement.split(", ")
             departement = departement[1] + " ""(" + departement[0] + ")"
         else:
-            departement = 'CODE POSTAL INVALIDE'
+            departement = None
         return departement
     
     def search_region_by_postcode(self, postcode):
@@ -37,5 +37,5 @@ class AddressApiClient:
             else:
                 region = region[1]
         else:
-            region = 'CODE POSTAL INVALIDE'
+            region = None
         return region    
