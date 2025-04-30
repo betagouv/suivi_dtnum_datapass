@@ -13,7 +13,7 @@ class DataPassApiClient:
         self.access_token = None
         self.proxies = {
             'http': os.getenv("PROXY_URL"),
-            'https': os.getenv("PROXY_URL")
+            'https': os.getenv("PROXY_URL"),
         }
 
     def get_token(self):
