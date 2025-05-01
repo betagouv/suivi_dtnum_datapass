@@ -36,8 +36,13 @@ api_names = {
 "AuthorizationRequest::APISatelitSandbox":"Satelit"
 }
 
-def match_api_name(api_name):
-    return api_names.get(api_name, "API inconnue")
+def match_api_name(api_name, data={}):
+    api_name = api_names.get(api_name, "API inconnue")
+    
+    if data.get('france_connect_authorization_id'):
+        api_name = f"{api_name} FC"
+        
+    return api_name
 
 
 def match_environnement(form_uid, demande_type):
