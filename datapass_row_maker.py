@@ -37,7 +37,7 @@ class DatapassRowMaker:
         row["N° Habilitation v2"] = None
         row["Environnement"] = data_correspondances.match_environnement(self.demande["form_uid"], self.demande["type"])
         row['Criticité'] = 'Normale' # Default value, will be overwritten by the input content if it exists
-        row["API"] = data_correspondances.match_api_name(self.demande["type"])
+        row["API"] = data_correspondances.match_api_name(self.demande["type"], self.demande["data"])
         row["Type"] = "Avenant" if self.demande["reopening"] else "Initial"
         row["Modèle pré-rempli / cas d'usage"] = data_correspondances.match_cas_dusage(self.demande["form_uid"])
 
@@ -67,7 +67,7 @@ class DatapassRowMaker:
         row = self.format_demande_row()
         row["N° Habilitation v2"] = habilitation["id"]
         row["Environnement"] = data_correspondances.match_environnement(self.demande["form_uid"], habilitation["authorization_request_class"])
-        row["API"] = data_correspondances.match_api_name(habilitation["authorization_request_class"])
+        row["API"] = data_correspondances.match_api_name(habilitation["authorization_request_class"], habilitation["data"])
 
         row = self.format_data_attributes(row, habilitation["data"])
         row.pop("Date de dernière soumission") # Don't overwrite the Date de dernière soumission, because it might have been reopened since
@@ -81,5 +81,6 @@ class DatapassRowMaker:
         row["Destinataires des données"] = data.get("destinataire_donnees_caractere_personnel")
         row["Date prévisionnelle d'ouverture de service"] = self.format_date(data.get("date_prevue_mise_en_production"))
         row["Volumétrie"] = data.get("volumetrie_appels_par_minute")
+        row["N° DataPass rattaché (BAS ou FC)"] = data.get("france_connect_authorization_id")
         
         return row
