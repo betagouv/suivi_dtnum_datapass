@@ -8,14 +8,19 @@ load_dotenv()
 # Doc of the Address API: https://adresse.data.gouv.fr/outils/api-doc/adresse
 class AddressApiClient:
     BASE_URL = 'https://api-adresse.data.gouv.fr/search/?q='
-    proxies = {
-        'http': os.getenv("PROXY_URL"),
-        'https': os.getenv("PROXY_URL"),
-    }
+
+    def proxies(self):
+        if os.getenv("PROXY_URL"):
+            return {
+                'http': os.getenv("PROXY_URL"),
+                'https': os.getenv("PROXY_URL"),
+            }
+        else:
+            return None
 
     def search_department_by_postcode(self, postcode):
         url = f"{self.BASE_URL}postcode={postcode}"
-        response = requests.get(url, proxies=self.proxies)
+        response = requests.get(url, proxies=self.proxies())
         json_data = json.loads(str(response.text))
         if 'features' in json_data and len(json_data['features']) != 0 :
             departement = json_data['features'][0]['properties']['context']
@@ -27,7 +32,7 @@ class AddressApiClient:
     
     def search_region_by_postcode(self, postcode):
         url = f"{self.BASE_URL}postcode={postcode}"
-        response = requests.get(url, proxies=self.proxies)
+        response = requests.get(url, proxies=self.proxies())
         json_data = json.loads(str(response.text))
         if 'features' in json_data and len(json_data['features']) != 0 :
             region = json_data['features'][0]['properties']['context']

@@ -1,4 +1,3 @@
-import sys
 import os
 import time
 from suivi_dtnum_updater import SuiviDtnumUpdater
