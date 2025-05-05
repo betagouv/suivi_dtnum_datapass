@@ -132,9 +132,25 @@ class SuiviDtnumUpdater:
 
         return output_rows
 
-    def merge_input_and_datapass_content(self, input_content, datapass_content):
-
+    def add_regions_and_departments(self, output_content):
+        # Fill only blank regions and departments using the Address API
+        # Not processing rows with null/none values of postcode for the moment
         address_api_client = AddressApiClient()
+        relevant_rows = [row for row in output_content if row.get("Code postal") and not (row.get("Département") and row.get("Région"))]
+
+        print (f"Filling regions and departments using the Address API for {len(relevant_rows)} rows")
+        
+        for row in relevant_rows:
+            print(".", end="", flush=True)
+            postcode = row.get("Code postal")
+            region_and_departement = address_api_client.search_region_and_department_by_postcode(postcode)
+            row["Département"] = region_and_departement["departement"]
+            row["Région"] = region_and_departement["region"]
+
+        print("\nAll departments and regions have been fetched")
+        return output_content
+
+    def merge_input_and_datapass_content(self, input_content, datapass_content):
 
         print(f"Lengths of contents before merging : input: {len(input_content)} datapass: {len(datapass_content)}")
         # Merge everything simple, meaning the rows of demandes without habilitations + the rows of habilitations from both contents
@@ -161,23 +177,8 @@ class SuiviDtnumUpdater:
         print(f"Leftover datapass content : {len(datapass_content)} -> Check the file leftover_datapass_content.csv")
         datapass_content.to_csv("sources/leftover_datapass_content.csv", index=False, quoting=1)
 
-        # Fill only blank regions and departments using the Address API
-        # Not processing rows with null/none values of postcode for the moment
-        print ("Filling regions and departments using the Address API")
-        for row in output_rows:
-            print("#", end="")
-            postcode = row.get("Code postal")
-
-            if postcode and not (row.get("Département") and row.get("Région")):
-                print(".", end="")
-                region_and_departement = address_api_client.search_region_and_department_by_postcode(postcode)
-
-                if not row.get("Département"):
-                    row["Département"] = region_and_departement["departement"]
-                if not row.get("Région"):
-                    row["Région"] = region_and_departement["region"]
-
-        print("\nAll departments and regions have been fetched")
+        # add regions and departments
+        output_rows = self.add_regions_and_departments(output_rows)
 
         # Convert list to DataFrame once at the end
         output_content = pd.DataFrame(output_rows)
