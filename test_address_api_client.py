@@ -1,4 +1,3 @@
-import pytest
 from address_api_client import AddressApiClient
 
 def test_search_region_and_department_by_postcode_75012():
