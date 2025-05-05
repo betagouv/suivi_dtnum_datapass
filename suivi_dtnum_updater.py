@@ -112,9 +112,15 @@ class SuiviDtnumUpdater:
         # This makes a copy of the input_row without the columns we want to overwrite
         cleaned_input_row = input_row.drop(columns=mandatory_columns_to_overwrite)
         # This updates the cleaned_input_row empty values with the datapass_row values
-        # then this updates the result with the initial input_row values in case there were some empty values left in mandatory columns
+        # then restore dropped columns with values from datapass_row
+        # then updates the result with the initial input_row values in case there were some empty values left in mandatory columns
         # (Note : We might need to adapt the combination differently for the v1 and the v2 data)
-        return cleaned_input_row.combine_first(datapass_row).combine_first(input_row)
+        temp_output_row = cleaned_input_row.combine_first(datapass_row)
+        for col in mandatory_columns_to_overwrite:
+            if col in datapass_row:
+                temp_output_row[col] = datapass_row[col]        
+        output_row = temp_output_row.combine_first(input_row)
+        return output_row
 
     def add_leftover_datapass_and_remove_matched_rows(self, datapass_content):
         output_rows = []
