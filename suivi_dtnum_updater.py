@@ -163,13 +163,21 @@ class SuiviDtnumUpdater:
 
         # Fill only blank regions and departments using the Address API
         # Not processing rows with null/none values of postcode for the moment
+        print ("Filling regions and departments using the Address API")
         for row in output_rows:
+            print("#", end="")
             postcode = row.get("Code postal")
-            if postcode:
+
+            if postcode and not (row.get("Département") and row.get("Région")):
+                print(".", end="")
+                region_and_departement = address_api_client.search_region_and_department_by_postcode(postcode)
+
                 if not row.get("Département"):
-                    row["Département"] = address_api_client.search_department_by_postcode(postcode)
+                    row["Département"] = region_and_departement["departement"]
                 if not row.get("Région"):
-                    row["Région"] = address_api_client.search_region_by_postcode(postcode)    
+                    row["Région"] = region_and_departement["region"]
+
+        print("\nAll departments and regions have been fetched")
 
         # Convert list to DataFrame once at the end
         output_content = pd.DataFrame(output_rows)
