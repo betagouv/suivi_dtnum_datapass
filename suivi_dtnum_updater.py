@@ -132,18 +132,17 @@ class SuiviDtnumUpdater:
 
         return output_rows
 
+
+    def value_is_empty(self, value):
+        # pd.isna checks for None and NaN
+        return pd.isna(value) or value == "" or value == "NON RENSEIGNE"
+
     def row_needs_region_and_department(self, row):
         return (
-            not pd.isna(row.get("Code postal"))
-            and row.get("Code postal") != ""
-            and row.get("Code postal") != "NON RENSEIGNE"
+            not self.value_is_empty(row.get("Code postal"))
             and (
-                pd.isna(row.get("Département"))
-                or row.get("Département") == ""
-                or row.get("Département") == "NON RENSEIGNE"
-                or pd.isna(row.get("Région"))
-                or row.get("Région") == ""
-                or row.get("Région") == "NON RENSEIGNE"
+                self.value_is_empty(row.get("Département"))
+                or self.value_is_empty(row.get("Région"))
             )
         )
     
