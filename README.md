@@ -3,15 +3,20 @@
 ## Initialisation du fichier post-migration
 
 1. Récupérer la dernière version du fichier de suivi
-2. Renommer la colonne "N° DataPass" en "N° DataPass v1" + ajouter "Date de dernière soumission"
-3. Extraire les IDs de V2 des datapass du fichier de suivi depuis la prod
-4. Insérer les IDs de v2 dans 2 nouvelles colonnes du fichier de suivi "N° Demande v2" et "N° Habilitation v2"
-5. Générer des credentials d'accès à l'API pour un user dgfip (maimouna ?)
-6. Faire tourner le script `main.py` avec ces credentials et le fichier de suivi pour générer un nouveau fichier à jour
+2. Renommer la colonne "N° DataPass" en "N° DataPass v1"
+3. Ajouter "Date de dernière soumission"
+4. Renommer la colonne "N° DataPass rattaché (BAS ou FC)" en "N° DataPass FC rattaché"
+
+5. Extraire les IDs de V2 des datapass du fichier de suivi depuis la prod (à faire par Valentin)
+
+6. Insérer les IDs de v2 dans 2 nouvelles colonnes du fichier de suivi "N° Demande v2" et "N° Habilitation v2"
+7. Générer des credentials d'accès à l'API pour un user dgfip -> Quel user ? (maimouna ?) (à faire par Valentin)
+
+8. Faire tourner le script `main.py` et le fichier de suivi pour générer un nouveau fichier à jour
 
 ## Mise à jour du fichier après initialisation
 
-Faire tourner le script `main.py` avec les credentials sus-cités et le dernier fichier de suivi
+Faire tourner le script `main.py` avec le dernier fichier de suivi
 
 # Instructions pour installer le projet
 
@@ -35,11 +40,21 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+4. Add environnment variables
+```
+# Si besoin de proxy, typiquement pour la dgfip
+PROXY_URL
+
+# Credentials d'accès à l'API Datapass à récupérer dans le profil utilisateur sur Datapass
+DATAPASS_CLIENT_ID
+DATAPASS_CLIENT_SECRET
+```
+
 ## Usage
 
 The main script can be run with:
 ```bash
-python3 main.py <client_id> <client_secret>
+python3 main.py
 ```
 
 Make sure to provide your client credentials as command line arguments when running the script. 

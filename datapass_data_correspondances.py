@@ -38,10 +38,10 @@ api_names = {
 
 def match_api_name(api_name, data={}):
     api_name = api_names.get(api_name, "API inconnue")
-    
+
     if data.get('france_connect_authorization_id'):
         api_name = f"{api_name} FC"
-        
+
     return api_name
 
 

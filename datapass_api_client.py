@@ -1,4 +1,5 @@
 import requests
+import os
 
 # Swagger of the DataPass API: https://github.com/etalab/data_pass/blob/develop/config/openapi/v1.yaml
 class DataPassApiClient:
@@ -10,6 +11,10 @@ class DataPassApiClient:
         self.client_secret = client_secret
         self.base_url = base_url
         self.access_token = None
+        self.proxies = {
+            'http': os.getenv("PROXY_URL"),
+            'https': os.getenv("PROXY_URL"),
+        }
 
     def get_token(self):
         """Get OAuth token from DataPass API"""
@@ -22,7 +27,7 @@ class DataPassApiClient:
         }
         
         try:
-            response = requests.post(url, data=data)
+            response = requests.post(url, data=data, proxies=self.proxies)
             response.raise_for_status()
             token_data = response.json()
             self.access_token = token_data['access_token']
@@ -57,7 +62,7 @@ class DataPassApiClient:
         
         try:
             request_method = getattr(requests, method.lower())
-            response = request_method(url, headers=headers, json=data, params=params)
+            response = request_method(url, headers=headers, json=data, params=params, proxies=self.proxies)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
