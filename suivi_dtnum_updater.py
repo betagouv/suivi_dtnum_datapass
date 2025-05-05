@@ -132,11 +132,26 @@ class SuiviDtnumUpdater:
 
         return output_rows
 
+    def row_needs_region_and_department(self, row):
+        return (
+            not pd.isna(row.get("Code postal"))
+            and row.get("Code postal") != ""
+            and row.get("Code postal") != "NON RENSEIGNE"
+            and (
+                pd.isna(row.get("Département"))
+                or row.get("Département") == ""
+                or row.get("Département") == "NON RENSEIGNE"
+                or pd.isna(row.get("Région"))
+                or row.get("Région") == ""
+                or row.get("Région") == "NON RENSEIGNE"
+            )
+        )
+    
     def add_regions_and_departments(self, output_content):
         # Fill only blank regions and departments using the Address API
         # Not processing rows with null/none values of postcode for the moment
         address_api_client = AddressApiClient()
-        relevant_rows = [row for row in output_content if row.get("Code postal") and not (row.get("Département") and row.get("Région"))]
+        relevant_rows = [row for row in output_content if self.row_needs_region_and_department(row)]
 
         print (f"Filling regions and departments using the Address API for {len(relevant_rows)} rows")
         
