@@ -20,8 +20,8 @@ if __name__ == "__main__":
     #client_id = sys.argv[1]
     #client_secret = sys.argv[2]
 
-    client_id=os.getenv("CLIENT_ID")
-    client_secret=os.getenv("CLIENT_SECRET")
+    client_id=os.getenv("DATAPASS_CLIENT_ID")
+    client_secret=os.getenv("DATAPASS_CLIENT_SECRET")
 
     updater = SuiviDtnumUpdater(client_id, client_secret)
     updater.run(INPUT_FILE_PATH, OUTPUT_FILE_PATH)
