@@ -135,7 +135,7 @@ class SuiviDtnumUpdater:
 
     def value_is_empty(self, value):
         # pd.isna checks for None and NaN
-        return pd.isna(value) or value == "" or value == "NON RENSEIGNE"
+        return pd.isna(value) or value == "" or value == "NON RENSEIGNE" or value == "CODE POSTAL NON VALIDE" or value == "SIRET NON VALIDE"
 
     def row_needs_region_and_department(self, row):
         return (
