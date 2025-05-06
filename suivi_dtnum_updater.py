@@ -22,12 +22,12 @@ class SuiviDtnumUpdater:
         print(f"Reading original file from {input_file_path}...")
         
         try:
-            # Read the ODS file with header at row 3 (index 2)
+            # Read the ODS file with header at row 5 (index 4)
             input_content = pd.read_excel(
                 input_file_path,
                 engine="odf",
                 sheet_name='Demandes_accès',
-                header=2
+                header=4
             )
             
             # Print the number of lines
@@ -108,7 +108,7 @@ class SuiviDtnumUpdater:
 
     def merge_input_row_and_datapass_row(self, input_row, datapass_row):
         # We want to overwrite only these colomns from input with datapass content. The rest is overwritten only if it's empty in input.
-        mandatory_columns_to_overwrite = ['Statut', 'Nom projet', 'Description projet', 'Destinataires des données', 'Date prévisionnelle d\'ouverture de service', 'Volumétrie', 'Date de dernière soumission']
+        mandatory_columns_to_overwrite = ['Statut', 'Nom projet', 'Description projet', 'Destinataires des données', 'Date prévisionnelle d\'ouverture de service', 'Volumétrie', 'Date de dernière soumission', 'N° DataPass FC rattaché']
         # This makes a copy of the input_row without the columns we want to overwrite
         cleaned_input_row = input_row.drop(columns=mandatory_columns_to_overwrite)
         # This updates the cleaned_input_row empty values with the datapass_row values
