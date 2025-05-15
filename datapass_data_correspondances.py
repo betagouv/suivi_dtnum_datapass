@@ -64,7 +64,7 @@ cas_dusage_patterns = [
     (r'stationnement-residentiel', 'CITP - stationnement résidentiel'),
     
     # Récupération de données fiscales
-    (r'api-r2p-(sandbox|production|editeur)$', 'Récupération de données fiscales'),
+    (r'api-r2p-appel-spi', 'Récupération de données fiscales'),
     
     # Ordonnateur
     (r'api-r2p-ordonnateur', 'Ordonnateur - fiabilisation des bases tiers (collectivités)'),
