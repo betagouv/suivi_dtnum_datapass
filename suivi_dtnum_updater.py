@@ -173,6 +173,15 @@ class SuiviDtnumUpdater:
             output_rows.append(row)
 
         return output_rows
+    
+    def mark_duplicated_rows(self, output_content):
+        # Create a mask to identify duplicates based on N° Demande v2 and N° Habilitation v2
+        duplicate_mask = output_content.duplicated(subset=['N° Demande v2', 'N° Habilitation v2'], keep=False)
+        
+        # For rows that are duplicated, set "Erreurs" column to "Duplicated"
+        output_content.loc[duplicate_mask, 'Erreurs'] = 'DOUBLON sur N° Demande / N° Habilitation'
+        
+        return output_content
 
     def merge_input_and_datapass_content(self, input_content, datapass_content):
 
@@ -211,6 +220,9 @@ class SuiviDtnumUpdater:
 
         # sort rows by N° Datapass v1 then N° Demande v2, then N° Habilitation v2
         output_content = output_content.sort_values(by=['N° DataPass v1', 'N° Demande v2', 'N° Habilitation v2'])
+
+        # Mark duplicated rows in the "Erreurs" column
+        output_content = self.mark_duplicated_rows(output_content)
 
         print(f"#{len(output_content)} rows after merging input and datapass content")
         return output_content
