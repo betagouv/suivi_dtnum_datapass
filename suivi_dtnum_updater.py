@@ -165,6 +165,15 @@ class SuiviDtnumUpdater:
         print("\nAll departments and regions have been fetched")
         return output_content
 
+    def add_leftover_input_rows(self, input_content):
+        output_rows = []
+
+        for _, row in input_content.iterrows():
+            row["Erreurs"] = "N° Demande ou N° Habilitation non trouvé"
+            output_rows.append(row)
+
+        return output_rows
+
     def merge_input_and_datapass_content(self, input_content, datapass_content):
 
         print(f"Lengths of contents before merging : input: {len(input_content)} datapass: {len(datapass_content)}")
@@ -183,8 +192,7 @@ class SuiviDtnumUpdater:
         print(f"Lengths of contents after adding leftover datapass content : input: {len(input_content)} datapass: {len(datapass_content)}")
 
         # add the leftover input content that we couldn't match with datapass
-        for _, row in input_content.iterrows():
-            output_rows.append(row)
+        output_rows.extend(self.add_leftover_input_rows(input_content))
 
         # create files with the leftover contents
         print(f"Leftover input content : {len(input_content)} -> Check the file leftover_input_content.csv")
