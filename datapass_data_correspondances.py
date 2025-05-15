@@ -49,7 +49,7 @@ def match_environnement(form_uid, demande_type):
     if re.search(r'-editeur$', form_uid):
         return 'Unique'
     elif re.search(r'Sandbox$', demande_type):
-        return "Sandbox"
+        return "Bac à sable"
     else:
         return "Production"
 
