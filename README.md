@@ -4,7 +4,7 @@
 
 1. Récupérer la dernière version du fichier de suivi
 2. Renommer la colonne "N° DataPass" en "N° DataPass v1"
-3. Ajouter "Date de dernière soumission"
+3. Ajouter la colonne "Erreurs"
 4. Renommer la colonne "N° DataPass rattaché (BAS ou FC)" en "N° DataPass FC rattaché"
 
 5. Extraire les IDs de V2 des datapass du fichier de suivi depuis la prod (à faire par Valentin)

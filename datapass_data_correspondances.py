@@ -49,7 +49,7 @@ def match_environnement(form_uid, demande_type):
     if re.search(r'-editeur$', form_uid):
         return 'Unique'
     elif re.search(r'Sandbox$', demande_type):
-        return "Sandbox"
+        return "Bac à sable"
     else:
         return "Production"
 
@@ -64,7 +64,7 @@ cas_dusage_patterns = [
     (r'stationnement-residentiel', 'CITP - stationnement résidentiel'),
     
     # Récupération de données fiscales
-    (r'api-r2p-(sandbox|production|editeur)$', 'Récupération de données fiscales'),
+    (r'api-r2p-appel-spi', 'Récupération de données fiscales'),
     
     # Ordonnateur
     (r'api-r2p-ordonnateur', 'Ordonnateur - fiabilisation des bases tiers (collectivités)'),
@@ -92,9 +92,12 @@ statut_correspondances = {
     'archived':'Supprimé',
     # Status of habilitations
     'active': 'Accepté',
-    'obsolete': 'Accepté (obsolète)',
+    'obsolete': 'Accepté',
     'revoked': 'Révoqué'
 }
 
-def match_statut(statut):
-    return statut_correspondances.get(statut, "Statut inconnu")
+def match_statut(statut, revoked=None):
+    if revoked:
+        return statut_correspondances.get('revoked')
+    else:
+        return statut_correspondances.get(statut, "Statut inconnu")

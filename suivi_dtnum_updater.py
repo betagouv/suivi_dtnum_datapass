@@ -4,6 +4,9 @@ from datapass_row_maker import DatapassRowMaker
 from address_api_client import AddressApiClient
 
 class SuiviDtnumUpdater:
+    # We want to overwrite only these colomns from input with datapass content. The rest is overwritten only if it's empty in input.
+    MANDATORY_COLUMNS_TO_OVERWRITE = ['N° DataPass FC rattaché', 'Statut', 'Nom projet', 'Description projet', 'Destinataires des données', 'Date prévisionnelle d\'ouverture de service', 'Volumétrie', 'Quotas']
+    
     def __init__(self, client_id, client_secret):
         self.client_id = client_id
         self.client_secret = client_secret
@@ -107,16 +110,14 @@ class SuiviDtnumUpdater:
         return output_rows
 
     def merge_input_row_and_datapass_row(self, input_row, datapass_row):
-        # We want to overwrite only these colomns from input with datapass content. The rest is overwritten only if it's empty in input.
-        mandatory_columns_to_overwrite = ['Statut', 'Nom projet', 'Description projet', 'Destinataires des données', 'Date prévisionnelle d\'ouverture de service', 'Volumétrie', 'Date de dernière soumission', 'N° DataPass FC rattaché']
         # This makes a copy of the input_row without the columns we want to overwrite
-        cleaned_input_row = input_row.drop(columns=mandatory_columns_to_overwrite)
+        cleaned_input_row = input_row.drop(columns=self.MANDATORY_COLUMNS_TO_OVERWRITE)
         # This updates the cleaned_input_row empty values with the datapass_row values
         # then restore dropped columns with values from datapass_row
         # then updates the result with the initial input_row values in case there were some empty values left in mandatory columns
         # (Note : We might need to adapt the combination differently for the v1 and the v2 data)
         temp_output_row = cleaned_input_row.combine_first(datapass_row)
-        for col in mandatory_columns_to_overwrite:
+        for col in self.MANDATORY_COLUMNS_TO_OVERWRITE:
             if col in datapass_row:
                 temp_output_row[col] = datapass_row[col]        
         output_row = temp_output_row.combine_first(input_row)
@@ -164,6 +165,24 @@ class SuiviDtnumUpdater:
         print("\nAll departments and regions have been fetched")
         return output_content
 
+    def add_leftover_input_rows(self, input_content):
+        output_rows = []
+
+        for _, row in input_content.iterrows():
+            row["Erreurs"] = "N° Demande ou N° Habilitation non trouvé"
+            output_rows.append(row)
+
+        return output_rows
+    
+    def mark_duplicated_rows(self, output_content):
+        # Create a mask to identify duplicates based on N° Demande v2 and N° Habilitation v2
+        duplicate_mask = output_content.duplicated(subset=['N° Demande v2', 'N° Habilitation v2'], keep=False)
+        
+        # For rows that are duplicated, set "Erreurs" column to "Duplicated"
+        output_content.loc[duplicate_mask, 'Erreurs'] = 'DOUBLON sur N° Demande / N° Habilitation'
+        
+        return output_content
+
     def merge_input_and_datapass_content(self, input_content, datapass_content):
 
         print(f"Lengths of contents before merging : input: {len(input_content)} datapass: {len(datapass_content)}")
@@ -182,8 +201,7 @@ class SuiviDtnumUpdater:
         print(f"Lengths of contents after adding leftover datapass content : input: {len(input_content)} datapass: {len(datapass_content)}")
 
         # add the leftover input content that we couldn't match with datapass
-        for _, row in input_content.iterrows():
-            output_rows.append(row)
+        output_rows.extend(self.add_leftover_input_rows(input_content))
 
         # create files with the leftover contents
         print(f"Leftover input content : {len(input_content)} -> Check the file leftover_input_content.csv")
@@ -202,6 +220,9 @@ class SuiviDtnumUpdater:
 
         # sort rows by N° Datapass v1 then N° Demande v2, then N° Habilitation v2
         output_content = output_content.sort_values(by=['N° DataPass v1', 'N° Demande v2', 'N° Habilitation v2'])
+
+        # Mark duplicated rows in the "Erreurs" column
+        output_content = self.mark_duplicated_rows(output_content)
 
         print(f"#{len(output_content)} rows after merging input and datapass content")
         return output_content
