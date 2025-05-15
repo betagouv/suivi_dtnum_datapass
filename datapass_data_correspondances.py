@@ -92,7 +92,7 @@ statut_correspondances = {
     'archived':'Supprimé',
     # Status of habilitations
     'active': 'Accepté',
-    'obsolete': 'Accepté (obsolète)',
+    'obsolete': 'Accepté',
     'revoked': 'Révoqué'
 }
 
