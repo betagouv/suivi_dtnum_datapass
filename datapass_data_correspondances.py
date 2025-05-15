@@ -96,5 +96,8 @@ statut_correspondances = {
     'revoked': 'Révoqué'
 }
 
-def match_statut(statut):
-    return statut_correspondances.get(statut, "Statut inconnu")
+def match_statut(statut, revoked=None):
+    if revoked:
+        return statut_correspondances.get('revoked')
+    else:
+        return statut_correspondances.get(statut, "Statut inconnu")

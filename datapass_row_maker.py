@@ -71,7 +71,7 @@ class DatapassRowMaker:
 
         row = self.format_data_attributes(row, habilitation["data"])
         row.pop("Date de dernière soumission") # Don't overwrite the Date de dernière soumission, because it might have been reopened since
-        row["Statut"] = data_correspondances.match_statut(habilitation["state"])
+        row["Statut"] = data_correspondances.match_statut(habilitation["state"], habilitation["revoked"])
 
         return row
 
