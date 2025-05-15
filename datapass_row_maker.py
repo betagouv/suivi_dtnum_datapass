@@ -42,9 +42,8 @@ class DatapassRowMaker:
         row["Modèle pré-rempli / cas d'usage"] = data_correspondances.match_cas_dusage(self.demande["form_uid"])
 
         row = self.format_data_attributes(row, self.demande["data"])
-        row["Date de création / réception"] = self.format_date(self.demande['reopened_at'] or self.demande["created_at"])
-        # row["Date de dernière modification"] = self.format_date(self.demande["events"].last()['created_at'])  # TODO still need this ? (need to add the data to the API)
-        row["Date de dernière soumission"] = self.format_date(self.demande["last_submitted_at"]) # TODO : make a new column for this, and keep the updated_at to have the last "answer" date
+        row["Date de création / réception"] = self.format_date(self.demande['reopened_at'] or self.demande["last_submitted_at"])
+        row["Date de dernière modification"] = self.format_date(self.demande["last_submitted_at"])
         row["Statut"] = data_correspondances.match_statut(self.demande["state"]) 
         
         # Get SIRET safely from nested dictionary
@@ -70,7 +69,6 @@ class DatapassRowMaker:
         row["API"] = data_correspondances.match_api_name(habilitation["authorization_request_class"], habilitation["data"])
 
         row = self.format_data_attributes(row, habilitation["data"])
-        row.pop("Date de dernière soumission") # Don't overwrite the Date de dernière soumission, because it might have been reopened since
         row["Statut"] = data_correspondances.match_statut(habilitation["state"], habilitation["revoked"])
 
         return row
