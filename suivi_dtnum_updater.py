@@ -7,14 +7,15 @@ class SuiviDtnumUpdater:
     # We want to overwrite only these colomns from input with datapass content. The rest is overwritten only if it's empty in input.
     MANDATORY_COLUMNS_TO_OVERWRITE = ['N° DataPass FC rattaché', 'Statut', 'Nom projet', 'Description projet', 'Destinataires des données', 'Date prévisionnelle d\'ouverture de service', 'Volumétrie', 'Quotas']
     
-    def __init__(self, client_id, client_secret):
+    def __init__(self, client_id, client_secret, is_local=False):
         self.client_id = client_id
         self.client_secret = client_secret
+        self.is_local = is_local
 
     def run(self, input_file_path, output_file_path):
         input_content = self.read_input_file(input_file_path)
         
-        api_client = DataPassApiClient(self.client_id, self.client_secret)
+        api_client = DataPassApiClient(self.client_id, self.client_secret, is_local=self.is_local)
         all_demandes = api_client.get_all_demandes()
 
         self.generate_output_content(all_demandes, input_content, output_file_path)

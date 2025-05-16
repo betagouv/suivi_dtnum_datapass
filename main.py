@@ -1,5 +1,6 @@
 import os
 import time
+import argparse
 from suivi_dtnum_updater import SuiviDtnumUpdater
 from dotenv import load_dotenv
 
@@ -11,8 +12,15 @@ INPUT_FILE_PATH = os.path.join(SCRIPT_DIR, "sources", "Fichier de suivi DTNUM 14
 OUTPUT_FILE_PATH = os.path.join(SCRIPT_DIR, "sources", time.strftime("%Y%m%d-%H%M%S") + "-fichier-suivi-maj.xlsx")
 
 if __name__ == "__main__":
-    client_id=os.getenv("DATAPASS_CLIENT_ID")
-    client_secret=os.getenv("DATAPASS_CLIENT_SECRET")
+    parser = argparse.ArgumentParser(description="Update DTNUM tracking file with DataPass data")
+    parser.add_argument("--client-id", help="DataPass client ID")
+    parser.add_argument("--client-secret", help="DataPass client secret")
+    parser.add_argument("--is-local", help="To use the Datapass API on localhost", action="store_true")
+    args = parser.parse_args()
+    
+    # Use command line arguments if provided, otherwise fall back to environment variables
+    client_id = args.client_id or os.getenv("DATAPASS_CLIENT_ID")
+    client_secret = args.client_secret or os.getenv("DATAPASS_CLIENT_SECRET")
 
-    updater = SuiviDtnumUpdater(client_id, client_secret)
+    updater = SuiviDtnumUpdater(client_id, client_secret, is_local=args.is_local)
     updater.run(INPUT_FILE_PATH, OUTPUT_FILE_PATH)
