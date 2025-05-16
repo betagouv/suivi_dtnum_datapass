@@ -43,7 +43,7 @@ class DatapassRowMaker:
 
         row = self.format_data_attributes(row, self.demande["data"])
         row["Date de création / réception"] = self.format_date(self.demande['reopened_at'] or self.demande["last_submitted_at"])
-        row["Date de dernière modification"] = self.format_date(self.demande["last_submitted_at"])
+        row["Date de dernière modification"] = self.format_date(self.demande["last_submitted_at"]) # TODO date de dernier changement de statut.
         row["Statut"] = data_correspondances.match_statut(self.demande["state"]) 
         
         # Get SIRET safely from nested dictionary
@@ -59,6 +59,7 @@ class DatapassRowMaker:
         row['Ville'] = adresse.get("libelleCommuneEtablissement")
         row['Département'] = None # Made none to be filled by the Address API
         row['Région'] = None
+    
 
         return row
 
@@ -80,5 +81,6 @@ class DatapassRowMaker:
         row["Date prévisionnelle d'ouverture de service"] = self.format_date(data.get("date_prevue_mise_en_production"))
         row["Volumétrie"] = data.get("volumetrie_appels_par_minute")
         row["N° DataPass FC rattaché"] = data.get("france_connect_authorization_id")
+        row["Quota"] = data.get("volumetrie_appels_par_minute")
         
         return row
