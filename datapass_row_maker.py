@@ -1,7 +1,10 @@
+import sys
 from dateutil import parser
 import datapass_data_correspondances as data_correspondances
 
 class DatapassRowMaker:
+    STATE_EVENTS = ["approve", "refuse", "request_changes", "submit", "reopen"]
+
     def __init__(self, demande):
         self.demande = demande
 
@@ -31,6 +34,12 @@ class DatapassRowMaker:
         
         return rows
 
+    def get_date_of_last_state_event(self, demande):
+        state_events = [event for event in demande["events"] if event["name"] in self.STATE_EVENTS]
+        if not state_events:
+            return None
+        return max(event["created_at"] for event in state_events)
+
     def format_demande_row(self):
         row = {}
         row["N° Demande v2"] = self.demande["id"]
@@ -42,9 +51,9 @@ class DatapassRowMaker:
         row["Modèle pré-rempli / cas d'usage"] = data_correspondances.match_cas_dusage(self.demande["form_uid"])
 
         row = self.format_data_attributes(row, self.demande["data"])
-        row["Date de création / réception"] = self.format_date(self.demande['reopened_at'] or self.demande["last_submitted_at"])
-        row["Date de dernière modification"] = self.format_date(self.demande["last_submitted_at"])
-        row["Statut"] = data_correspondances.match_statut(self.demande["state"]) 
+        row["Date de réception"] = self.format_date(self.demande['reopened_at'] or self.demande["last_submitted_at"])
+        row["Date de dernière soumission ou instruction"] = self.format_date(self.get_date_of_last_state_event(self.demande))
+        row["Statut"] = data_correspondances.match_statut(self.demande["state"])
         
         # Get SIRET safely from nested dictionary
         organisation = self.demande.get("organisation", {})
@@ -59,6 +68,7 @@ class DatapassRowMaker:
         row['Ville'] = adresse.get("libelleCommuneEtablissement")
         row['Département'] = None # Made none to be filled by the Address API
         row['Région'] = None
+    
 
         return row
 
@@ -69,6 +79,7 @@ class DatapassRowMaker:
         row["API"] = data_correspondances.match_api_name(habilitation["authorization_request_class"], habilitation["data"])
 
         row = self.format_data_attributes(row, habilitation["data"])
+        row["Date de dernière modification"] = self.format_date(habilitation["created_at"])
         row["Statut"] = data_correspondances.match_statut(habilitation["state"], habilitation["revoked"])
 
         return row
@@ -80,5 +91,6 @@ class DatapassRowMaker:
         row["Date prévisionnelle d'ouverture de service"] = self.format_date(data.get("date_prevue_mise_en_production"))
         row["Volumétrie"] = data.get("volumetrie_appels_par_minute")
         row["N° DataPass FC rattaché"] = data.get("france_connect_authorization_id")
+        row["Quota"] = data.get("volumetrie_appels_par_minute")
         
         return row
