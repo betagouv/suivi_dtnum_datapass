@@ -9,9 +9,8 @@
 5. Ajouter la colonne "Erreurs"
 6. Renommer la colonne "N° DataPass rattaché (BAS ou FC)" en "N° DataPass FC rattaché"
 
-7. Extraire les IDs de V2 des datapass du fichier de suivi depuis la prod (à faire par Valentin)
-
-8. Insérer les IDs de v2 dans 2 nouvelles colonnes du fichier de suivi "N° Demande v2" et "N° Habilitation v2"
+7. Insérer les ids de `matched_ids_post_bascule.csv` dans les colonnes `N° DataPass v1` et `N° Demande v2` et	`N° Habilitation v2`
+8. Insérer les dates de `suivi_dtnum_dates.csv` dans les colonnes `Date de création / réception` et	`Date de dernière modification`
 9. Générer des credentials d'accès à l'API pour un user dgfip -> Quel user ? (maimouna ?) (à faire par Valentin)
 
 10. Faire tourner le script `main.py` et le fichier de suivi pour générer un nouveau fichier à jour
