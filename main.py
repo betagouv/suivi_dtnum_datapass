@@ -8,7 +8,7 @@ load_dotenv()
 
 # Define paths relative to the script's directory
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-INPUT_FILE_PATH = os.path.join(SCRIPT_DIR, "sources", "Fichier de suivi DTNUM 1404 with v2 ids.ods")
+INPUT_FILE_PATH = os.path.join(SCRIPT_DIR, "sources", "dgfip - dtnum - demandes dacces api - fichier de suivi version test- 1605 with v2 ids.ods")
 OUTPUT_FILE_PATH = os.path.join(SCRIPT_DIR, "sources", time.strftime("%Y%m%d-%H%M%S") + "-fichier-suivi-maj.xlsx")
 
 if __name__ == "__main__":
