@@ -6,10 +6,15 @@ class DataPassApiClient:
     # BASE_URL = 'http://localhost:3000'
     BASE_URL = 'https://sandbox.v2.datapass.api.gouv.fr'
 
-    def __init__(self, client_id, client_secret, base_url=BASE_URL):
+    def __init__(self, client_id, client_secret, base_url=BASE_URL, is_local=False):
         self.client_id = client_id
         self.client_secret = client_secret
-        self.base_url = base_url
+        
+        if is_local:
+            self.base_url = 'http://localhost:3000'
+        else:
+            self.base_url = base_url
+
         self.access_token = None
         self.proxies = {
             'http': os.getenv("PROXY_URL"),

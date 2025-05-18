@@ -4,15 +4,17 @@
 
 1. Récupérer la dernière version du fichier de suivi
 2. Renommer la colonne "N° DataPass" en "N° DataPass v1"
-3. Ajouter la colonne "Erreurs"
-4. Renommer la colonne "N° DataPass rattaché (BAS ou FC)" en "N° DataPass FC rattaché"
+3. Renommer la colonne "Date de création / réception" en "Date de réception"
+4. Renommer la colonne "Date de dernière modification" en "Date de dernière soumission ou instruction"
+5. Ajouter la colonne "Erreurs"
+6. Renommer la colonne "N° DataPass rattaché (BAS ou FC)" en "N° DataPass FC rattaché"
 
-5. Extraire les IDs de V2 des datapass du fichier de suivi depuis la prod (à faire par Valentin)
+7. Extraire les IDs de V2 des datapass du fichier de suivi depuis la prod (à faire par Valentin)
 
-6. Insérer les IDs de v2 dans 2 nouvelles colonnes du fichier de suivi "N° Demande v2" et "N° Habilitation v2"
-7. Générer des credentials d'accès à l'API pour un user dgfip -> Quel user ? (maimouna ?) (à faire par Valentin)
+8. Insérer les IDs de v2 dans 2 nouvelles colonnes du fichier de suivi "N° Demande v2" et "N° Habilitation v2"
+9. Générer des credentials d'accès à l'API pour un user dgfip -> Quel user ? (maimouna ?) (à faire par Valentin)
 
-8. Faire tourner le script `main.py` et le fichier de suivi pour générer un nouveau fichier à jour
+10. Faire tourner le script `main.py` et le fichier de suivi pour générer un nouveau fichier à jour
 
 ## Mise à jour du fichier après initialisation
 
