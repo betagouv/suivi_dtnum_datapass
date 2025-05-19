@@ -1,0 +1,21 @@
+datapass_v1_id, api_name, status, previous_datapass_v1_id
+6617,api_impot_particulier_production,refused,4123
+6940,api_particulier,refused,
+13233,api_impot_particulier_fc_production,revoked,8995
+22116,api_impot_particulier_fc_production,refused,1778
+36183,api_ficoba_production,refused,3633
+38400,api_tiers_de_prestation,validated,
+44675,api_impot_particulier_production,refused,42429
+44701,api_impot_particulier_production,refused,42429
+44836,api_impot_particulier_fc_production,refused,40649
+46512,api_tiers_de_prestation,validated,
+48238,api_impot_particulier_production,refused,41095
+50865,api_impot_particulier_fc_production,refused,50737
+52396,api_impot_particulier_production,refused,47923
+56636,api_impot_particulier_production,refused,56085
+57015,api_impot_particulier_production,refused,56662
+57210,api_infinoe_production,refused,57232
+58687,api_infinoe_production,refused,56541
+60025,hubee_portail,archived,
+61199,api_impot_particulier_fc_production,refused,58527
+63747,api_infinoe_production,refused,63670
