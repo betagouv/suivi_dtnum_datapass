@@ -166,21 +166,45 @@ class SuiviDtnumUpdater:
         print("\nAll departments and regions have been fetched")
         return output_content
 
+    def append_error(self, row, error_message):
+        # Create a copy of the row to avoid SettingWithCopyWarning
+        row_copy = row.copy()
+        
+        if pd.isna(row_copy["Erreurs"]) or row_copy["Erreurs"] is None:
+            row_copy["Erreurs"] = error_message
+        else:
+            row_copy["Erreurs"] = f"{row_copy['Erreurs']}\n{error_message}"
+        
+        return row_copy
+
     def add_leftover_input_rows(self, input_content):
         output_rows = []
 
         for _, row in input_content.iterrows():
-            row["Erreurs"] = "N° Demande ou N° Habilitation non trouvé"
-            output_rows.append(row)
+            if self.value_is_empty(row.get("N° Demande v2")):
+                row_with_error = self.append_error(row, "N° Demande v2 vide")
+            else:
+                row_with_error = self.append_error(row, "N° Demande ou N° Habilitation non trouvé")
+            output_rows.append(row_with_error)
 
         return output_rows
-    
+
     def mark_duplicated_rows(self, output_content):
         # Create a mask to identify duplicates based on N° Demande v2 and N° Habilitation v2
         duplicate_mask = output_content.duplicated(subset=['N° Demande v2', 'N° Habilitation v2'], keep=False)
         
-        # For rows that are duplicated, set "Erreurs" column to "Duplicated"
-        output_content.loc[duplicate_mask, 'Erreurs'] = 'DOUBLON sur N° Demande / N° Habilitation'
+        # For rows that are duplicated, append to "Erreurs" column rather than overwriting
+        duplicate_message = 'DOUBLON sur N° Demande / N° Habilitation'
+        
+        # Only get the 'Erreurs' column for updating, to minimize data copying
+        if duplicate_mask.any():
+            for idx in output_content[duplicate_mask].index:
+                # Extract just the necessary fields for the append_error operation
+                mini_row = pd.Series({'Erreurs': output_content.loc[idx, 'Erreurs']})
+                # Apply the append_error method
+                updated_mini_row = self.append_error(mini_row, duplicate_message)
+                # Update only the Erreurs column in the original DataFrame
+                output_content.loc[idx, 'Erreurs'] = updated_mini_row['Erreurs']
         
         return output_content
 
