@@ -46,8 +46,9 @@ class SuiviDtnumUpdater:
         
         datapass_rows = []
         for demande in all_demandes:
-            # ignore the drafts and archived without habilitations
-            if not ((demande["state"] in ["draft", "archived"]) & (len(demande["habilitations"]) == 0)):
+            # ignore demandes with no submit event
+            submit_events = [event for event in demande["events"] if event["name"] == "submit"]
+            if len(submit_events) > 0:
                 datapass_rows.extend(DatapassRowMaker(demande).make_rows_from_demande())
         
         datapass_content = pd.DataFrame(datapass_rows)
