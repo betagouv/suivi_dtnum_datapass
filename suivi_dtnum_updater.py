@@ -106,7 +106,7 @@ class SuiviDtnumUpdater:
                 datapass_content.drop(datapass_rows.index, inplace=True)
                 input_content.drop(input_row_index, inplace=True)
             else:
-                raise(f"Found several rows with N° Demande {input_row['N° Demande v2']} in datapass content")
+                raise Exception(f"Found several rows with N° Demande {input_row['N° Demande v2']} in datapass content")
         
         return output_rows
 
