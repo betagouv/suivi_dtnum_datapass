@@ -3,7 +3,7 @@ from address_api_client import AddressApiClient
 
 class DataMerger:
     # We want to overwrite only these colomns from input with datapass content. The rest is overwritten only if it's empty in input.
-    DATAPASS_PRIORITISED_COLUMNS = ['N° DataPass FC rattaché', 'API', 'Environnement', 'Statut', 'Nom projet', 'Description projet', 'Destinataires des données', 'Date prévisionnelle d\'ouverture de service', 'Volumétrie', 'Quotas']
+    DATAPASS_PRIORITISED_COLUMNS = ['N° DataPass FC rattaché', 'API', 'Environnement', 'Date de dernière soumission ou instruction', 'Statut', 'Nom projet', 'Description projet', 'Destinataires des données', 'Date prévisionnelle d\'ouverture de service', 'Volumétrie', 'Quotas']
     
     def __init__(self, input_content, datapass_content):
         self.input_content = input_content
