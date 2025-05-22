@@ -5,7 +5,7 @@ from address_api_client import AddressApiClient
 
 class SuiviDtnumUpdater:
     # We want to overwrite only these colomns from input with datapass content. The rest is overwritten only if it's empty in input.
-    MANDATORY_COLUMNS_TO_OVERWRITE = ['N° DataPass FC rattaché', 'Statut', 'Nom projet', 'Description projet', 'Destinataires des données', 'Date prévisionnelle d\'ouverture de service', 'Volumétrie', 'Quotas']
+    MANDATORY_COLUMNS_TO_OVERWRITE = ['N° DataPass FC rattaché', 'API', 'Environnement', 'Statut', 'Nom projet', 'Description projet', 'Destinataires des données', 'Date prévisionnelle d\'ouverture de service', 'Volumétrie', 'Quotas']
     
     def __init__(self, client_id, client_secret, is_local=False):
         self.client_id = client_id
