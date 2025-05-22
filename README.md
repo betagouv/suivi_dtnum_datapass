@@ -70,7 +70,7 @@ Fait le 19/05/2025 entre la DINUM et la DTNUM
 6. Renommer la colonne "N° DataPass rattaché (BAS ou FC)" en "N° DataPass FC rattaché"
 
 7. Insérer les ids de `matched_ids_post_bascule.csv` dans les colonnes `N° DataPass v1` et `N° Demande v2` et	`N° Habilitation v2`
-8. Insérer les dates de `suivi_dtnum_dates.csv` dans les colonnes `Date de création / réception` et	`Date de dernière modification`
+8. Insérer les dates de `suivi_dtnum_dates.csv` dans les colonnes `Date de réception` et	`Date de dernière soumission ou instruction`
 9. Générer des credentials d'accès à l'API pour un user dgfip -> Quel user ? (maimouna ?) (à faire par Valentin)
 
 10. Faire tourner le script `main.py` et le fichier de suivi pour générer un nouveau fichier à jour

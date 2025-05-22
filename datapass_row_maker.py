@@ -80,7 +80,7 @@ class DatapassRowMaker:
         row["Type"] = "Initial" if self.is_first_habilitation(habilitation) else "Avenant"
 
         row = self.format_data_attributes(row, habilitation["data"])
-        row["Date de dernière modification"] = self.format_date(habilitation["created_at"])
+        row["Date de dernière soumission ou instruction"] = self.format_date(habilitation["created_at"])
         row["Statut"] = data_correspondances.match_statut(habilitation["state"], habilitation["revoked"])
 
         return row
