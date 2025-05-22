@@ -74,3 +74,13 @@ On refait une passe sur le résultat pour identifier de potentiels doublons, et 
 
 
 ## 2.2 Méthode de fusion
+
+Lorsque l'on fusionne une ligne de suivi DTNUM avec une ligne de DataPass, on va privilégier les données de suivi ou les données datapass selon les colonnes.
+
+[Voir la liste des données privilégiées de DataPass](https://github.com/betagouv/suivi_dtnum_datapass/blob/main/data_merger.py/#L6-L7)
+
+Pour la majorité des données provenant de DataPass, on va les privilégier pour écraser les informations du fichier de suivi. Mais il y a quelques cas particuliers pour lesquels on préfère utiliser la "mémoire" du fichier de suivi pour retenir certains informations.
+
+**Modèle pré-rempli / cas d'usage** : Par ce que certains types de DataPass v1 n'existent pas dans datapass v2, nous n'écrasons pas cette colonne pour conserver l'information.
+
+**Date de réception** : Cette date est remplie avec soit la date de réouverture de la demande, soit la date de soumission initiale. Lorsqu'une demande est réouverte, son habilitation précédente doit conserver sa date de réception. Nous n'écrasons donc pas cette information du fichier de suivi pour éviter de mettre à jour toutes les dates de réception des habilitations précédent une réouverture.
