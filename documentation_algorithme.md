@@ -77,9 +77,9 @@ On refait une passe sur le résultat pour identifier de potentiels doublons, et 
 
 Lorsque l'on fusionne une ligne de suivi DTNUM avec une ligne de DataPass, on va privilégier les données de suivi ou les données datapass selon les colonnes.
 
-[Voir la liste des données privilégiées de DataPass](https://github.com/betagouv/suivi_dtnum_datapass/blob/main/data_merger.py/#L6-L7)
+[Voir la liste des données privilégiées de DataPass](https://github.com/betagouv/suivi_dtnum_datapass/blob/main/data_merger.py/#L6-L7). Pour toutes les colonnes qui ne sont pas dans cette liste, on privilégie les données du fichier de suivi DTNUM.
 
-Pour la majorité des données provenant de DataPass, on va les privilégier pour écraser les informations du fichier de suivi. Mais il y a quelques cas particuliers pour lesquels on préfère utiliser la "mémoire" du fichier de suivi pour retenir certains informations.
+Pour la plupart des données provenant de DataPass, on va les privilégier pour écraser les informations du fichier de suivi. Mais il y a quelques cas particuliers pour lesquels on préfère utiliser la "mémoire" du fichier de suivi pour retenir certains informations :
 
 **Modèle pré-rempli / cas d'usage** : Par ce que certains types de DataPass v1 n'existent pas dans datapass v2, nous n'écrasons pas cette colonne pour conserver l'information.
 
