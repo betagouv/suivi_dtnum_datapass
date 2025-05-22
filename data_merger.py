@@ -3,7 +3,7 @@ from address_api_client import AddressApiClient
 
 class DataMerger:
     # We want to overwrite only these colomns from input with datapass content. The rest is overwritten only if it's empty in input.
-    MANDATORY_COLUMNS_TO_OVERWRITE = ['N° DataPass FC rattaché', 'API', 'Environnement', 'Statut', 'Nom projet', 'Description projet', 'Destinataires des données', 'Date prévisionnelle d\'ouverture de service', 'Volumétrie', 'Quotas']
+    DATAPASS_PRIORITISED_COLUMNS = ['N° DataPass FC rattaché', 'API', 'Environnement', 'Statut', 'Nom projet', 'Description projet', 'Destinataires des données', 'Date prévisionnelle d\'ouverture de service', 'Volumétrie', 'Quotas']
     
     def __init__(self, input_content, datapass_content):
         self.input_content = input_content
@@ -113,13 +113,13 @@ class DataMerger:
 
     def merge_input_row_and_datapass_row(self, input_row, datapass_row):
         # This makes a copy of the input_row without the columns we want to overwrite
-        cleaned_input_row = input_row.drop(columns=self.MANDATORY_COLUMNS_TO_OVERWRITE)
+        cleaned_input_row = input_row.drop(columns=self.DATAPASS_PRIORITISED_COLUMNS)
         # This updates the cleaned_input_row empty values with the datapass_row values
         # then restore dropped columns with values from datapass_row
         # then updates the result with the initial input_row values in case there were some empty values left in mandatory columns
         # (Note : We might need to adapt the combination differently for the v1 and the v2 data)
         temp_output_row = cleaned_input_row.combine_first(datapass_row)
-        for col in self.MANDATORY_COLUMNS_TO_OVERWRITE:
+        for col in self.DATAPASS_PRIORITISED_COLUMNS:
             if col in datapass_row:
                 temp_output_row[col] = datapass_row[col]        
         output_row = temp_output_row.combine_first(input_row)
