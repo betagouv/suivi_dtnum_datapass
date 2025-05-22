@@ -34,7 +34,7 @@ A noter que la correspondance des cas d'usage est faite à l'aide d'expression r
 
 ## 2. Fusion des données de suivi avec les données datapass
 
-https://github.com/betagouv/suivi_dtnum_datapass/blob/main/data_merger.py
+https://github.com/betagouv/suivi_dtnum_datapass/blob/main/data_merger.py#L15-L58
 
 La fusion se passe en plusieurs étapes.
 
@@ -61,3 +61,16 @@ On rajoute le stock restant de lignes datapass : Ce sont les nouvelles demandes 
 2.1.4. On rajoute les lignes de suivi qui restent
 
 On rajoute le stock restant de lignes de suivi DTNUM : Ce sont des ID que l'on n'a pas trouvés dans datapass, on remplit donc la colonne `Erreurs` avec un message indiquant l'erreur.
+
+2.1.5 On renseigne les régions et départements manqants
+
+Une fois qu'on a fini de créer les lignes du nouveau fichier de suivi, on en profite pour faire une repasse et remplir les données de régions et départements qui manquent.
+
+On utilise l'API Adresse de data.gouv.fr pour renseigner ces colonnes, dont voici [la documentation](https://adresse.data.gouv.fr/outils/api-doc/adresse)
+
+2.1.6 On marque les lignes en doublons
+
+On refait une passe sur le résultat pour identifier de potentiels doublons, et on inscrit l'erreur dans la colonne `Erreurs`.
+
+
+## 2.2 Méthode de fusion
