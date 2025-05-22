@@ -77,9 +77,10 @@ class DatapassRowMaker:
         row["N° Habilitation v2"] = habilitation["id"]
         row["Environnement"] = data_correspondances.match_environnement(self.demande["form_uid"], habilitation["authorization_request_class"])
         row["API"] = data_correspondances.match_api_name(habilitation["authorization_request_class"], habilitation["data"])
+        row["Type"] = "Initial" if self.is_first_habilitation(habilitation) else "Avenant"
 
         row = self.format_data_attributes(row, habilitation["data"])
-        row["Date de dernière modification"] = self.format_date(habilitation["created_at"])
+        row["Date de dernière soumission ou instruction"] = self.format_date(habilitation["created_at"])
         row["Statut"] = data_correspondances.match_statut(habilitation["state"], habilitation["revoked"])
 
         return row
@@ -93,4 +94,11 @@ class DatapassRowMaker:
         row["N° DataPass FC rattaché"] = data.get("france_connect_authorization_id")
         row["Quota"] = data.get("volumetrie_appels_par_minute")
         
-        return row
+        return row 
+    
+    def is_first_habilitation(self, habilitation):
+        # Find the earliest created habilitation
+        earliest_date = min(h["created_at"] for h in self.demande["habilitations"])
+        
+        # Check if current habilitation is the earliest one
+        return habilitation["created_at"] == earliest_date
