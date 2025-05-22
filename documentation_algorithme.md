@@ -40,7 +40,7 @@ La fusion se passe en plusieurs étapes.
 
 ### 2.1. Fusion des demandes et habilitations
 
-2.1.1. On fusionne les demandes en cours et les habilitations existantes
+#### 2.1.1. On fusionne les demandes en cours et les habilitations existantes
 
 Pour ce faire, si on trouve dans les deux fichiers des lignes avec :
 - Soit `N° de demande v2` égal et `N° d'habilitation v2` vide
@@ -48,27 +48,27 @@ Pour ce faire, si on trouve dans les deux fichiers des lignes avec :
 
 Alors on fusionne les lignes des deux fichiers, et on les retire du stock.
 
-2.1.2. Puis on fusionne les demandes qui ont "gagné" une habilitation
+#### 2.1.2. Puis on fusionne les demandes qui ont "gagné" une habilitation
 
 Dans le stock restant, on cherche les lignes de suivi avec `N° de demande v2` et `N° d'habilitation v2` vide, qui correspondent à une ligne datapass avec le même `N° de demande v2` et `N° d'habilitation v2` non vide.
 
 On fusionn ces lignes qui ont "gagné" une habilitation car leur instruction s'est terminée depuis la dernière éxecution du programme. Et on les retire du stock.
 
-2.1.3. On rajoute les nouvelles lignes datapass
+#### 2.1.3. On rajoute les nouvelles lignes datapass
 
 On rajoute le stock restant de lignes datapass : Ce sont les nouvelles demandes qui ont été créées depuis la dernière exécution du programme.
 
-2.1.4. On rajoute les lignes de suivi qui restent
+#### 2.1.4. On rajoute les lignes de suivi qui restent
 
 On rajoute le stock restant de lignes de suivi DTNUM : Ce sont des ID que l'on n'a pas trouvés dans datapass, on remplit donc la colonne `Erreurs` avec un message indiquant l'erreur.
 
-2.1.5 On renseigne les régions et départements manqants
+#### 2.1.5 On renseigne les régions et départements manqants
 
 Une fois qu'on a fini de créer les lignes du nouveau fichier de suivi, on en profite pour faire une repasse et remplir les données de régions et départements qui manquent.
 
 On utilise l'API Adresse de data.gouv.fr pour renseigner ces colonnes, dont voici [la documentation](https://adresse.data.gouv.fr/outils/api-doc/adresse)
 
-2.1.6 On marque les lignes en doublons
+#### 2.1.6 On marque les lignes en doublons
 
 On refait une passe sur le résultat pour identifier de potentiels doublons, et on inscrit l'erreur dans la colonne `Erreurs`.
 
