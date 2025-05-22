@@ -5,7 +5,7 @@ Ce programme sert à mettre à jour le fichier de suivi DTNUM avec les données 
 
 ## Description de l'algorithme
 
-Voir [la documentation](./documentation_algorithme.md)
+Voir [le fichier décrivant l'algorithme](./documentation_algorithme.md) de mise à jour du fichier de suivi DTNUM avec les données de DataPass.
 
 
 ## Instructions pour installer le projet
