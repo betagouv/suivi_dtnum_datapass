@@ -1,6 +1,6 @@
 # Description de l'algorithme
 
-## 1. Création des lignes à partir des données DataPass
+## 1. Création d'un "fichier" de données DataPass
 
 https://github.com/betagouv/suivi_dtnum_datapass/blob/main/datapass_row_maker.py/#L21-L22
 
@@ -22,7 +22,7 @@ Par exemple l'`id` d'une demande deviendra `"N° Demande v2"`, et l'id d'une hab
 
 A noter que l'habilitation reprend tous les champs de la demande, et en écrase certains pour qu'ils correspondent aux données de l'habilitation elle-même, et non aux données de la demande qui a pu être réouverte depuis.
 
-### 1.2. Correspondance des labels
+### 1.2. Correspondance aux labels de suivi DTNUM
 
 https://github.com/betagouv/suivi_dtnum_datapass/blob/main/datapass_data_correspondances.py
 
@@ -34,4 +34,30 @@ A noter que la correspondance des cas d'usage est faite à l'aide d'expression r
 
 ## 2. Fusion des données de suivi avec les données datapass
 
-TODO
+https://github.com/betagouv/suivi_dtnum_datapass/blob/main/data_merger.py
+
+La fusion se passe en plusieurs étapes.
+
+### 2.1. Fusion des demandes et habilitations
+
+2.1.1. On fusionne les demandes en cours et les habilitations existantes
+
+Pour ce faire, si on trouve dans les deux fichiers des lignes avec :
+- Soit `N° de demande v2` égal et `N° d'habilitation v2` vide
+- Soit `N° de demande v2` égal et `N° d'habilitation v2` égal
+
+Alors on fusionne les lignes des deux fichiers, et on les retire du stock.
+
+2.1.2. Puis on fusionne les demandes qui ont "gagné" une habilitation
+
+Dans le stock restant, on cherche les lignes de suivi avec `N° de demande v2` et `N° d'habilitation v2` vide, qui correspondent à une ligne datapass avec le même `N° de demande v2` et `N° d'habilitation v2` non vide.
+
+On fusionn ces lignes qui ont "gagné" une habilitation car leur instruction s'est terminée depuis la dernière éxecution du programme. Et on les retire du stock.
+
+2.1.3. On rajoute les nouvelles lignes datapass
+
+On rajoute le stock restant de lignes datapass : Ce sont les nouvelles demandes qui ont été créées depuis la dernière exécution du programme.
+
+2.1.4. On rajoute les lignes de suivi qui restent
+
+On rajoute le stock restant de lignes de suivi DTNUM : Ce sont des ID que l'on n'a pas trouvés dans datapass, on remplit donc la colonne `Erreurs` avec un message indiquant l'erreur.
