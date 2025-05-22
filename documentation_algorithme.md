@@ -62,7 +62,7 @@ On rajoute le stock restant de lignes datapass : Ce sont les nouvelles demandes 
 
 On rajoute le stock restant de lignes de suivi DTNUM : Ce sont des ID que l'on n'a pas trouvés dans datapass, on remplit donc la colonne `Erreurs` avec un message indiquant l'erreur.
 
-#### 2.1.5 On renseigne les régions et départements manqants
+#### 2.1.5 On renseigne les régions et départements manquants
 
 Une fois qu'on a fini de créer les lignes du nouveau fichier de suivi, on en profite pour faire une repasse et remplir les données de régions et départements qui manquent.
 
