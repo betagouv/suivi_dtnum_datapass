@@ -173,7 +173,9 @@ class DataMerger:
         if pd.isna(row_copy["Erreurs"]) or row_copy["Erreurs"] is None:
             row_copy["Erreurs"] = error_message
         else:
-            row_copy["Erreurs"] = f"{row_copy['Erreurs']}\n{error_message}"
+            # Check if the error message is already present in the column
+            if error_message not in row_copy["Erreurs"]:
+                row_copy["Erreurs"] = f"{row_copy['Erreurs']}\n{error_message}"
         
         return row_copy
 
