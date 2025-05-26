@@ -11,7 +11,6 @@ Pour coller à la forme du fichier de suivi DTNUM (qui hérite sa forme de la pr
   - une ligne par habilitation
   - une ligne supplémentaire pour la demande si elle est dans l'état "submitted", "changes_requested" ou "refused"
 
-
 ### 1.1. Correspondance des données
 
 https://github.com/betagouv/suivi_dtnum_datapass/blob/main/datapass_row_maker.py#L43-L96
@@ -81,6 +80,13 @@ Lorsque l'on fusionne une ligne de suivi DTNUM avec une ligne de DataPass, on va
 
 Pour la plupart des données provenant de DataPass, on va les privilégier pour écraser les informations du fichier de suivi. Mais il y a quelques cas particuliers pour lesquels on préfère utiliser la "mémoire" du fichier de suivi pour retenir certains informations :
 
+**N° DataPass rattaché (BAS ou FC)** : Historiquement cette colonne contenait des numéros de datapass FranceConnect _ou_ des numéros de datapass bac à sable. Désormais il ne contient plus que des numéros de datapass FranceConnect, mais pour ne pas écraser l'historique on garde le contenu du fichier de suivi en priorité.
+
 **Modèle pré-rempli / cas d'usage** : Par ce que certains types de DataPass v1 n'existent pas dans datapass v2, nous n'écrasons pas cette colonne pour conserver l'information.
 
 **Date de réception** : Cette date est remplie avec soit la date de réouverture de la demande, soit la date de soumission initiale. Lorsqu'une demande est réouverte, son habilitation précédente doit conserver sa date de réception. Nous n'écrasons donc pas cette information du fichier de suivi pour éviter de mettre à jour toutes les dates de réception des habilitations précédent une réouverture.
+
+
+## 3. Details supplémentaires
+
+**Date de dernière soumission ou instruction** : Si la ligne représente une demande, on choisit la dernière date d'évènement représentant une soumission ou une instruction (soumission initiale, réouverture, demande de modification ou refus). Si c'est une habilitation, on choisit la date de création de l'habilitation.
