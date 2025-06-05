@@ -29,6 +29,10 @@ class DataMerger:
         output_rows.extend(self.add_leftover_datapass_and_remove_matched_rows(datapass_content))
         print(f"Lengths of contents after adding leftover datapass content : input: {len(input_content)} datapass: {len(datapass_content)}")
 
+        # Considérer les lignes restantes qui sont des demandes
+        # Checker leurs events dans les données datapass, si elle a été refusée après une demande de réouverture
+        # Alors on garde la ligne sans la taguer comme erreur, on update son statut à refusé et on l'ajoute aux output_rows.
+
         # add the leftover input content that we couldn't match with datapass
         output_rows.extend(self.add_leftover_input_rows(input_content))
 
