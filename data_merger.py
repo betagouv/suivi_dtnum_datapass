@@ -29,9 +29,9 @@ class DataMerger:
         output_rows.extend(self.add_leftover_datapass_and_remove_matched_rows(datapass_content))
         print(f"Lengths of contents after adding leftover datapass content : input: {len(input_content)} datapass: {len(datapass_content)}")
 
-        # Considérer les lignes restantes qui sont des demandes
-        # Checker leurs events dans les données datapass, si elle a été refusée après une demande de réouverture
-        # Alors on garde la ligne sans la taguer comme erreur, on update son statut à refusé et on l'ajoute aux output_rows.
+        # add reopened then refused demandes from datapass
+        output_rows.extend(self.add_reopened_and_refused_datapass_and_remove_matched_rows(datapass_content))
+        print(f"Lengths of contents after adding reopened then refused demandes from datapass : input: {len(input_content)} datapass: {len(datapass_content)}")
 
         # add the leftover input content that we couldn't match with datapass
         output_rows.extend(self.add_leftover_input_rows(input_content))
@@ -47,6 +47,9 @@ class DataMerger:
 
         # Convert list to DataFrame once at the end
         output_content = pd.DataFrame(output_rows)
+
+        # drop Events column
+        output_content = output_content.drop(columns=['Events'])
 
         # sort the headers in the same order as the original file
         output_content = output_content[input_content.columns]
@@ -137,6 +140,22 @@ class DataMerger:
             output_rows.append(datapass_row)
             datapass_content.drop(datapass_row.name, inplace=True)
 
+        return output_rows
+    
+    def last_event_is_refuse(self, events):
+        if not events:
+            return False
+        last_event = max(events, key=lambda x: x["created_at"])
+        return last_event.get("name") == "refuse"
+
+    def add_reopened_and_refused_datapass_and_remove_matched_rows(self, datapass_content):
+        output_rows = []
+        for _, datapass_row in datapass_content.iterrows():
+            if datapass_row["Statut"] == "Accepté" and self.last_event_is_refuse(datapass_row["Events"]):
+                # correct the status to refuse before append row
+                datapass_row["Statut"] == "Refusé"
+                output_rows.append(datapass_row)
+                datapass_content.drop(datapass_row.name, inplace=True)
         return output_rows
 
     def value_is_empty(self, value):

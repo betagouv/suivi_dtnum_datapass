@@ -68,6 +68,8 @@ class DatapassRowMaker:
         row['Ville'] = adresse.get("libelleCommuneEtablissement")
         row['Département'] = None # Made none to be filled by the Address API
         row['Région'] = None
+
+        row['Events'] = self.demande["events"] # For processing reopened and refused demandes, will droped in final output
     
 
         return row
