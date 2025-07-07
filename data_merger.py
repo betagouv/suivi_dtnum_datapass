@@ -193,7 +193,7 @@ class DataMerger:
         # Create a copy of the row to avoid SettingWithCopyWarning
         row_copy = row.copy()
         
-        if pd.isna(row_copy["Erreurs"]) or row_copy["Erreurs"] is None:
+        if not isinstance(row_copy["Erreurs"], str) or row_copy["Erreurs"].strip() == "":
             row_copy["Erreurs"] = error_message
         else:
             # Check if the error message is already present in the column
