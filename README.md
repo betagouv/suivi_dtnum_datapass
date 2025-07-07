@@ -40,7 +40,9 @@ DATAPASS_CLIENT_ID
 DATAPASS_CLIENT_SECRET
 ```
 
-## Usage
+## Usage via ligne de commande
+
+### Exécuter du programme
 
 Placer le fichier de suivi dans le dossier `sources`, et le renommer `fichier_suivi_dtnum.ods`
 
@@ -51,12 +53,18 @@ python3 main.py
 
 Le programme génèrera un fichier avec un nom de la forme `20250519-184529-fichier-suivi-maj.xlsx` dans le dossier `sources`.
 
-## Tests
+### Lancer les tests
 
 ```bash
 pytest test_update_suivi_dtnum.py
 ```
 
+## Usage IHM via executable windows
+
+Lancer le script de génération de l'exe avec : 
+```bash
+make_app.bat
+```
 
 # Initialisation du fichier post-migration
 
