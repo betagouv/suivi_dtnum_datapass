@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <title>APIDO - Demandes d'accès API</title>
+        <link rel="stylesheet" type="text/css" href="/static/style.css">
+        <link rel="stylesheet" href="/static/dsfr/dsfr.min.css">
+        <script src="/static/jquery-3.7.0.min.js"></script>
+        <meta name="theme-color" content="#000091">
+        <link rel="apple-touch-icon" href="/static/dsfr/favicon/apple-touch-icon.png">
+        <link rel="icon" href="/static/dsfr/favicon/favicon.svg" type="image/svg+xml">
+        <link rel="shortcut icon" href="/static/dsfr/favicon/favicon.ico" type="image/x-icon">
+        <link rel="manifest" href="/static/dsfr/favicon/manifest.webmanifest" crossorigin="use-credentials">
+    </head>
+    <body>
+        <header role="banner" class="fr-header">    
+            <div class="fr-header__body">        
+                <div class="fr-container">            
+                    <div class="fr-header__body-row">                
+                        <div class="fr-header__brand fr-enlarge-link">                    
+                            <div class="fr-header__brand-top">                        
+                                <div class="fr-header__logo">                            
+                                    <p class="fr-logo">                                
+                                        République                               
+                                        <br>Française                           
+                                    </p>                        
+                                </div>                    
+                            </div>                    
+                            <div class="fr-header__service">    
+                                <a href="/reset_progress" title="Réinitialiser - Automatisation FSDA" id="reset-button">
+                                    <p class="fr-header__service-title">APIDO - Demandes d'accès API</p>                        
+                                </a> 
+                                <p class="fr-header__service-tagline">
+                                    Mise à jour automatique du fichier de suivi
+                                </p>                    
+                            </div>                
+                        </div>            
+                    </div>        
+                </div>    
+            </div>
+        </header>
+<!--         <h1>Automatisation FSDA</h1> -->
+        <main>
+            <div class="container">
+                <form class="import" action="/upload" method="post" enctype="multipart/form-data">
+                    <div class="import-box">
+                        <div class="import-item">
+                            <input type="file" name="ods_file" accept=".ods" class="input-file" hidden>
+                            <span class="custom-txt">Importer le fichier de suivi</span>
+                            <img src="/static/media/file-arrow-up-solid.svg" alt="icone upload" class="icon btn">
+                        </div>
+                    </div>
+                    <div class="import-item item">
+                        <input type="submit" value="Lancer le traitement" class="input-file" hidden>
+                        <button id="start-process" type="button" class="btn btn-style">Lancer le traitement</button>
+                        <div id="progress-bar-container">
+                            <div id="progress-label"></div>
+                            <div id="progress-bar-border">
+                                <div id="progress-bar"></div>
+                            </div>
+                        </div>
+                    </div>    
+                </form>
+                {% if processing_done %}
+                    <div class="export">
+                        <a href="/download"><span class="export-txt">Télécharger le fichier de suivi mis à jour</span></a>
+                        <a href="/download"><img src="/static/media/file-arrow-down-solid.svg" alt="icone upload" class="icon btn-export"></a>
+                    </div>
+    <!--                 <form action="/reset_progress" method="get">
+                        <button id="reset-button" class="btn-style">Réinitialiser</button>
+                    </form> -->
+                {% endif %}
+            </div>
+            <div id="error_popup" class="fr-alert fr-alert--error alert_style">    
+                <h3 class="fr-alert__title">Erreur</h3>    
+                <p>Un ou plusieurs fichiers sont manquants. Veuillez importer les fichiers requis.</p>
+            </div>
+            {% if processing_done %}
+            <div id="success_popup" class="fr-alert fr-alert--success alert_success_style">    
+                <h3 class="fr-alert__title">Succès</h3>    
+            </div>
+            {% endif %}
+        </main>
+        <script src="/static/main.js"></script>
+    </body>
+</html>
