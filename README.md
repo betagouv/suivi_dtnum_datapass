@@ -42,7 +42,7 @@ DATAPASS_CLIENT_SECRET
 
 ## Usage via ligne de commande
 
-### Exécuter du programme
+### Exécuter le programme
 
 Placer le fichier de suivi dans le dossier `sources`, et le renommer `fichier_suivi_dtnum.ods`
 
