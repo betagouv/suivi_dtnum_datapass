@@ -119,3 +119,15 @@ class DataPassApiClient:
         
         print(f"Total demandes retrieved: {len(all_demandes)}")
         return all_demandes
+    
+    def get_events_of_a_demande(self, id):
+        """
+        Get all events of a demande from DataPass API
+        
+        Args:
+            id (int): ID of the demand
+            
+        Returns:
+            list: List of events attached to a demande or None if error
+        """           
+        return self._make_authenticated_request(f"/api/v1/demandes/{id}/events")    

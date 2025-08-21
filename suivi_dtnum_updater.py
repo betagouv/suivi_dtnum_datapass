@@ -56,7 +56,7 @@ class SuiviDtnumUpdater:
         datapass_content = self.make_datapass_content_from_demandes(all_demandes)
         datapass_content.to_csv("sources/test_datapass_content.csv", index=False, quoting=1)
 
-        data_merger = DataMerger(input_content, datapass_content)
+        data_merger = DataMerger(input_content, datapass_content, self.client_id, self.client_secret, is_local=self.is_local)
         output_content = data_merger.generate_output_content()
         output_content.to_csv("sources/test_output_content.csv", index=False, quoting=1)
 

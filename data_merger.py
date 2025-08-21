@@ -1,13 +1,18 @@
 import pandas as pd
 from address_api_client import AddressApiClient
+from datapass_api_client import DataPassApiClient
+from datetime import datetime
 
 class DataMerger:
     # We want to overwrite only these colomns from input with datapass content. The rest is overwritten only if it's empty in input.
     DATAPASS_PRIORITISED_COLUMNS = ['N° DataPass FC rattaché', 'API', 'Environnement', 'Date de dernière soumission ou instruction', 'Statut', 'Nom projet', 'Description projet', 'Destinataires des données', 'Date prévisionnelle d\'ouverture de service', 'Volumétrie', 'Quotas']
     
-    def __init__(self, input_content, datapass_content):
+    def __init__(self, input_content, datapass_content, client_id, client_secret, is_local=False):
         self.input_content = input_content
         self.datapass_content = datapass_content
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.is_local = is_local
 
     def generate_output_content(self):
         return self.merge_input_and_datapass_content(self.input_content, self.datapass_content)
@@ -32,9 +37,7 @@ class DataMerger:
         # add the leftover input content that we couldn't match with datapass
         output_rows.extend(self.add_leftover_input_rows(input_content))
 
-        # create files with the leftover contents
-        print(f"Leftover input content : {len(input_content)} -> Check the file leftover_input_content.csv")
-        input_content.to_csv("sources/leftover_input_content.csv", index=False, quoting=1)
+        # create file with the leftover datapass content
         print(f"Leftover datapass content : {len(datapass_content)} -> Check the file leftover_datapass_content.csv")
         datapass_content.to_csv("sources/leftover_datapass_content.csv", index=False, quoting=1)
 
@@ -180,16 +183,48 @@ class DataMerger:
         return row_copy
 
     def add_leftover_input_rows(self, input_content):
+
+        # create file with the leftover input content before update
+        print(f"Leftover input content before update : {len(input_content)} -> Check the file leftover_input_content_before_update.csv")
+        input_content.to_csv("sources/leftover_input_content_before_update.csv", index=False, quoting=1)
+
         output_rows = []
 
         for _, row in input_content.iterrows():
             if self.value_is_empty(row.get("N° Demande v2")):
                 row_with_error = self.append_error(row, "N° Demande v2 vide")
             else:
+                row = self.update_status_of_cancelled_or_deleted_demandes(row)
                 row_with_error = self.append_error(row, "N° Demande ou N° Habilitation non trouvé")
             output_rows.append(row_with_error)
+        
+        # create file with the leftover input content after update
+        print(f"Leftover input content after update : {len(input_content)} -> Check the file leftover_input_content_updated.csv")
+        output_df = pd.DataFrame(output_rows)
+        output_df.to_csv("sources/leftover_input_content_updated.csv", index=False, quoting=1) 
 
         return output_rows
+    
+    #Udpate the status of not found demandes due to cancellation or deletion on datapass by checking last events
+    def update_status_of_cancelled_or_deleted_demandes(self, row):
+        datapass_api_client = DataPassApiClient(self.client_id, self.client_secret, is_local=self.is_local)
+        if row.get("Statut") in ["Modifications demandées au partenaire", "Traitement en cours par la DGFiP"]:
+            id_demande = row.get("N° Demande v2")
+            type_demande = row.get("Type")
+            events = datapass_api_client.get_events_of_a_demande(id_demande)
+            if not events:
+                return row
+            latest_event = max(events, key=lambda e: datetime.fromisoformat(e["created_at"]))
+            if type_demande == "Initial":
+                if latest_event.get("name") in ["cancel_next_stage", "cancel_reopening"]:
+                    row["Statut"] = "Supprimé"
+            elif type_demande == "Avenant":
+                if latest_event.get("name") == "refuse":
+                    row["Statut"] = "Refusé"
+                    row["Motif refus"] = "Refus de réouverture"
+                elif latest_event.get("name") == "cancel_reopening":
+                    row["Statut"] = "Supprimé"          
+        return row
 
     def mark_duplicated_rows(self, output_content):
         # Create a mask to identify duplicates based on N° Demande v2 and N° Habilitation v2
