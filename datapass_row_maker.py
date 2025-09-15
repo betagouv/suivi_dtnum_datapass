@@ -1,6 +1,7 @@
 import sys
 from dateutil import parser
 import datapass_data_correspondances as data_correspondances
+from datetime import datetime
 
 class DatapassRowMaker:
     STATE_EVENTS = ["approve", "refuse", "request_changes", "submit", "reopen"]
@@ -77,7 +78,7 @@ class DatapassRowMaker:
         row["N° Habilitation v2"] = habilitation["id"]
         row["Environnement"] = data_correspondances.match_environnement(self.demande["form_uid"], habilitation["authorization_request_class"])
         row["API"] = data_correspondances.match_api_name(habilitation["authorization_request_class"], habilitation["data"])
-        row["Type"] = "Initial" if self.is_first_habilitation(habilitation) else "Avenant"
+        row["Type"] = "Initial" if self.is_first_habilitation(row["Environnement"], row["N° Habilitation v2"]) else "Avenant"
 
         row = self.format_data_attributes(row, habilitation["data"])
         row["Date de dernière soumission ou instruction"] = self.format_date(habilitation["created_at"])
@@ -96,9 +97,12 @@ class DatapassRowMaker:
         
         return row 
     
-    def is_first_habilitation(self, habilitation):
-        # Find the earliest created habilitation
-        earliest_date = min(h["created_at"] for h in self.demande["habilitations"])
-        
-        # Check if current habilitation is the earliest one
-        return habilitation["created_at"] == earliest_date
+    def is_first_habilitation(self, environnement, habilitation_id):
+        if environnement == "Bac à sable":
+            filtered = [h for h in self.demande["habilitations"] if h["definition_id"].endswith("_sandbox")]
+        else:
+            filtered = [h for h in self.demande["habilitations"] if not h["definition_id"].endswith("_sandbox")]
+
+        oldest = min(filtered, key=lambda h: datetime.fromisoformat(h["created_at"]))
+
+        return oldest["id"] == habilitation_id

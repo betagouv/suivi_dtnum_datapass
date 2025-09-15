@@ -5,7 +5,7 @@ from datetime import datetime
 
 class DataMerger:
     # We want to overwrite only these colomns from input with datapass content. The rest is overwritten only if it's empty in input.
-    DATAPASS_PRIORITISED_COLUMNS = ['N° DataPass FC rattaché', 'API', 'Environnement', 'Date de dernière soumission ou instruction', 'Statut', 'Nom projet', 'Description projet', 'Destinataires des données', 'Date prévisionnelle d\'ouverture de service', 'Volumétrie', 'Quotas']
+    DATAPASS_PRIORITISED_COLUMNS = ['N° DataPass FC rattaché', 'API', 'Environnement', 'Date de dernière soumission ou instruction', 'Statut', 'Nom projet', 'Description projet', 'Destinataires des données', 'Date prévisionnelle d\'ouverture de service', 'Volumétrie', 'Quotas', 'Type']
     
     def __init__(self, input_content, datapass_content, client_id, client_secret, is_local=False):
         self.input_content = input_content
