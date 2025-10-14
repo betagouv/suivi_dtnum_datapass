@@ -64,6 +64,10 @@ class DatapassRowMaker:
         etablissement = insee_payload.get("etablissement", {})
         unite_legale = etablissement.get("uniteLegale", {})
         row['Raison sociale demandeur'] = unite_legale.get("denominationUniteLegale")
+
+        applicant = self.demande.get("applicant", {})
+        row["Email demandeur"] = applicant["email"]
+
         adresse = etablissement.get("adresseEtablissement", {})
         row['Code postal'] = adresse.get("codePostalEtablissement")
         row['Ville'] = adresse.get("libelleCommuneEtablissement")

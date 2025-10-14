@@ -14,23 +14,27 @@ class AddressApiClient:
             'https': os.getenv("PROXY_URL"),
         }
         url = f"{self.BASE_URL}postcode={postcode}"
-        response = requests.get(url, proxies=proxies)
-        json_data =  response.json()
+        try:
+            response = requests.get(url, proxies=proxies)
+            if response.status_code == 200:
+                json_data =  response.json()
+                if 'features' in json_data and len(json_data['features']) != 0 :
+                    departement = json_data['features'][0]['properties']['context']
+                    departement = departement.split(", ")
+                    departement = f"{departement[1]} ({departement[0]})"
 
-        if 'features' in json_data and len(json_data['features']) != 0 :
-            departement = json_data['features'][0]['properties']['context']
-            departement = departement.split(", ")
-            departement = f"{departement[1]} ({departement[0]})"
-
-            region = json_data['features'][0]['properties']['context']
-            region = region.split(", ")
-            if len(region) == 3:
-                region = region[2]
+                    region = json_data['features'][0]['properties']['context']
+                    region = region.split(", ")
+                    if len(region) == 3:
+                        region = region[2]
+                    else:
+                        region = region[1]
+                else:
+                    departement = None
+                    region = None
+                    
+                return { "departement": departement, "region": region }
             else:
-                region = region[1]
-        else:
-            departement = None
-            region = None
-            
-        return { "departement": departement, "region": region }
-    
+                return None
+        except Exception:
+            return None    

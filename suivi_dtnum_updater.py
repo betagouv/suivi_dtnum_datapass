@@ -1,4 +1,6 @@
 import pandas as pd
+#import os
+#import sys
 from datapass_api_client import DataPassApiClient
 from datapass_row_maker import DatapassRowMaker
 from data_merger import DataMerger
@@ -55,6 +57,7 @@ class SuiviDtnumUpdater:
     def generate_output_content(self, all_demandes, input_content, output_file_path):
         datapass_content = self.make_datapass_content_from_demandes(all_demandes)
         datapass_content.to_csv("sources/test_datapass_content.csv", index=False, quoting=1)
+        #datapass_content.to_csv(os.path.join(sys._MEIPASS,'outputs/contenu_datapass.csv'), index=False, quoting=1)
 
         data_merger = DataMerger(input_content, datapass_content, self.client_id, self.client_secret, is_local=self.is_local)
         output_content = data_merger.generate_output_content()

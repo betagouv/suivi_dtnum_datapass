@@ -163,8 +163,13 @@ class DataMerger:
             print(".", end="", flush=True)
             postcode = row.get("Code postal")
             region_and_departement = address_api_client.search_region_and_department_by_postcode(postcode)
-            row["Département"] = region_and_departement["departement"]
-            row["Région"] = region_and_departement["region"]
+
+            if region_and_departement is not None:
+                row["Département"] = region_and_departement["departement"]
+                row["Région"] = region_and_departement["region"]
+            else:
+                row["Département"] = None
+                row["Région"] = None
 
         print("\nAll departments and regions have been fetched")
         return output_content

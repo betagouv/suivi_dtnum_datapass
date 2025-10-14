@@ -137,6 +137,11 @@ def download():
     global output_path
     return send_file(output_path, as_attachment=True)
 
+# Téléchargement du contenu datapass
+@app.route('/download-datapass-content', methods=['GET'])
+def downloadDatapassContent():
+    output_path = resource_path('outputs/contenu_datapass.csv')
+    return send_file(output_path, as_attachment=True)
 
 # Lancement de l'app
 if __name__=='__main__':
