@@ -17,6 +17,7 @@ api_names = {
 "AuthorizationRequest::APIRobf":"ROBF",
 "AuthorizationRequest::APISFiP":"SFiP",
 "AuthorizationRequest::APISatelit":"Satelit",
+"AuthorizationRequest::APISFiPR2P":"SFiP-R2P",
 
 "AuthorizationRequest::APICprProAdelieSandbox":"CPR PRO",
 "AuthorizationRequest::APIEContactsSandbox":"E-Contacts",
@@ -33,7 +34,8 @@ api_names = {
 "AuthorizationRequest::APIRialSandbox":"RIAL",
 "AuthorizationRequest::APIRobfSandbox":"ROBF",
 "AuthorizationRequest::APISFiPSandbox":"SFiP",
-"AuthorizationRequest::APISatelitSandbox":"Satelit"
+"AuthorizationRequest::APISatelitSandbox":"Satelit",
+"AuthorizationRequest::APISFiPR2PSandbox":"SFiP-R2P"
 }
 
 def match_api_name(api_name, data={}):
