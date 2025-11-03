@@ -106,11 +106,14 @@ class DataMerger:
                 datapass_row = datapass_rows.iloc[0]
                 output_row = self.merge_input_row_and_datapass_row(input_row, datapass_row)
                 output_rows.append(output_row)
-                # Remove matched rows from both contents
-                datapass_content.drop(datapass_rows.index, inplace=True)
-                input_content.drop(input_row_index, inplace=True)
             else:
-                raise Exception(f"Found several rows with N° Demande {input_row['N° Demande v2']} in datapass content")
+                for _, datapass_row in datapass_rows.iterrows():
+                    output_row = self.merge_input_row_and_datapass_row(input_row.copy(), datapass_row)
+                    output_rows.append(output_row)
+            
+            # Remove matched rows from both contents
+            datapass_content.drop(datapass_rows.index, inplace=True)
+            input_content.drop(input_row_index, inplace=True)        
         
         return output_rows
 
